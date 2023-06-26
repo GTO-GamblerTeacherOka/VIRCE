@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRoid;
+using Zenject;
 
 namespace Launch
 {
     public class LaunchManager : MonoBehaviour
     {
-        [SerializeField]
-        private GUISkin skin;
+        [Inject]
+        private GUISkin _skin;
 
         private Rect _windowRect = new(0, 0, 400, 400);
         private string _registerCode = "";
@@ -20,7 +21,7 @@ namespace Launch
 
         private void OnGUI()
         {
-            GUI.skin = skin;
+            GUI.skin = _skin;
             _windowRect = GUI.Window(0, _windowRect, DrawWindow, "Welcome to V.I.R.C.E");
         }
 
