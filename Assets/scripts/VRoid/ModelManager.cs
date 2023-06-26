@@ -13,7 +13,7 @@ namespace VRoid
                 {
                     vrm.transform.localPosition = new Vector3(0, 0, 0);
                     vrm.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    vrm.transform.localScale = Vector3.one * 5;
+                    vrm.transform.localScale = Vector3.one * 3;
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                     var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y - vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
                     colliderComponent.height = height;
