@@ -48,6 +48,7 @@ MonoBehaviour:
   _monoInstallers: []
   _installerPrefabs:
   - {fileID: 7827229237284747216, guid: 1e168c757c36b8f4bbaf51cdad48ead4, type: 3}
+  - {fileID: 7581580138468274730, guid: 2d96ed3f1c0d81d4f8e5959f7a3f7443, type: 3}
   _parentNewObjectsUnderContext: 1
   _editorReflectionBakingCoverageMode: 0
   _buildsReflectionBakingCoverageMode: 0

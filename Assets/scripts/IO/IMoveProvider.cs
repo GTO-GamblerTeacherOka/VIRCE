@@ -1,7 +1,10 @@
+using System;
+
 namespace IO
 {
     public interface IMoveProvider
     {
+        [Flags]
         public enum MoveDirection
         {
             Forward = 1,
