@@ -41,5 +41,10 @@ namespace VRoid
         {
             _browser.OnRegisterCode(code);
         }
+        
+        public static void Logout()
+        {
+            _oauthClient.ReleaseAuthorizedAccount();
+        }
     }
 }
