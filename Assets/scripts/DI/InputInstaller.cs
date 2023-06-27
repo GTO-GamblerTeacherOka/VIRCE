@@ -7,8 +7,8 @@ namespace DI
     {
         public override void InstallBindings()
         {
-            Container.Bind<IMoveProvider>().To<MoveFromKey>().AsTransient();
-            Container.Bind<IViewPointProvider>().To<ViewPointFromMouse>().AsTransient();
+            Container.Bind<IMoveProvider>().To<MoveFromKey>().AsCached();
+            Container.Bind<IViewPointProvider>().To<ViewPointFromMouse>().AsCached();
         }
     }
 }
