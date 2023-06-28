@@ -2,12 +2,13 @@ using Lobby;
 using Pixiv.VroidSdk;
 using UnityEngine;
 using Zenject;
+// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
 namespace VRoid
 {
     public class ModelManager : MonoBehaviour
     {
-        [SerializeField] private Camera camera;
+        [SerializeField] private Camera vcam;
         [Inject] private DiContainer _container;
         
         private void Start()
@@ -17,14 +18,14 @@ namespace VRoid
                 ModelLoader.LoadVrm(models[0], vrm =>
                 {
                     vrm.transform.localPosition = new Vector3(0, 0, 0);
-                    vrm.transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    vrm.transform.localScale = Vector3.one * 3;
+                    vrm.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    vrm.transform.localScale = Vector3.one;
+                    
+                    vcam.transform.SetParent(vrm.transform);
+                    vcam.transform.localPosition = new Vector3(0, 1f, -2);
+                    vcam.transform.localEulerAngles = new Vector3(0, 0, 0);
 
                     _container.InstantiateComponent<PlayerControl>(vrm);
-
-                    Transform transform1;
-                    (transform1 = camera.transform).SetParent(vrm.transform);
-                    transform1.localPosition = new Vector3(0, 1, -1.5f);
                     
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                     var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y - vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
@@ -35,6 +36,9 @@ namespace VRoid
                     rigitBodyComponent.useGravity = true;
                     rigitBodyComponent.mass = 60;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation
+                                                     | RigidbodyConstraints.FreezePositionX
+                                                     | RigidbodyConstraints.FreezePositionZ;
                 }, progress =>
                 {
                     Debug.Log(progress);

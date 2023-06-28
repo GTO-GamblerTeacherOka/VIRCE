@@ -1,4 +1,3 @@
-using System;
 using Pixiv.VroidSdk;
 using UnityEngine;
 using VRoid;
@@ -6,7 +5,6 @@ using VRoid;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    public static GameManager Instance => _instance;
 
     private void Awake()
     {

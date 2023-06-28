@@ -5,7 +5,7 @@ namespace DI
 {
     public class GUIInstaller : Installer<GUISkin, GUIInstaller>
     {
-        private GUISkin _skin;
+        private readonly GUISkin _skin;
         
         public GUIInstaller(GUISkin skin)
         {

@@ -1,7 +1,7 @@
 using IO;
 using UnityEngine;
-using Util;
 using Zenject;
+// ReSharper disable Unity.InefficientPropertyAccess
 
 namespace Lobby
 {
@@ -13,36 +13,35 @@ namespace Lobby
         private IViewPointProvider _viewPointProvider;
         
         [SerializeField]
-        private float moveSpeed = 20.0f;
+        private float moveSpeed = 1.0f;
         [SerializeField]
-        private float viewPointSpeed = 20.0f;
+        private float viewPointSpeed = 1.0f;
 
         private void Update()
         {
             var moveDirection = _moveProvider.GetMoveDirection();
-            var moveVector = new Complex();
-            if ((moveDirection & IMoveProvider.MoveDirection.Forward) != 0)
+            var dPos = Vector3.zero;
+            if((moveDirection & IMoveProvider.MoveDirection.Forward)is not 0)
             {
-                moveVector += new Complex(0, 1);
+                dPos += transform.forward;
             }
-            if ((moveDirection & IMoveProvider.MoveDirection.Back) != 0)
+            if((moveDirection & IMoveProvider.MoveDirection.Back)is not 0)
             {
-                moveVector += new Complex(0, -1);
+                dPos -= transform.forward;
             }
-            if ((moveDirection & IMoveProvider.MoveDirection.Right) != 0)
+            if((moveDirection & IMoveProvider.MoveDirection.Left)is not 0)
             {
-                moveVector += new Complex(1, 0);
+                dPos -= transform.right;
             }
-            if ((moveDirection & IMoveProvider.MoveDirection.Left) != 0)
+            if((moveDirection & IMoveProvider.MoveDirection.Right)is not 0)
             {
-                moveVector += new Complex(-1, 0);
+                dPos += transform.right;
             }
-            transform.position += moveVector.Normalize.ToVector3 * (moveSpeed * Time.deltaTime);
+            
+            transform.position += dPos.normalized * (moveSpeed * Time.deltaTime);
             
             var horizontalViewPoint = _viewPointProvider.GetHorizontalViewPoint();
-            var verticalViewPoint = _viewPointProvider.GetVerticalViewPoint();
             transform.RotateAround(transform.position, Vector3.up, horizontalViewPoint * (viewPointSpeed * Time.deltaTime));
-            transform.RotateAround(transform.position, transform.right, -verticalViewPoint * (viewPointSpeed * Time.deltaTime));
         }
     }
 }
