@@ -1,3 +1,5 @@
+using System;
+using Lobby.Chat.DataBase;
 using UnityEngine;
 using Zenject;
 
@@ -7,10 +9,15 @@ namespace Lobby.Chat
     {
         [Inject]
         private GUISkin _skin;
+        [SerializeField]
+        private ChatManager chatManager;
+        
+        private IChatDataBase _chatDataBase;
         
         private Rect _windowRect = new(0, 0, 400, 400);
         private bool _showWindow;
         private Vector2 _screenSize = new(0, 0);
+        private Vector2 _scrollPosition = new(0, 0);
         
         [SerializeField] private Texture2D chatButtonTexture;
         [SerializeField] private Texture2D closeButtonTexture;
@@ -49,17 +56,25 @@ namespace Lobby.Chat
                 _showWindow = false;
             }
             _chatMessage = GUI.TextField(new Rect(20, 350, 320, 20), _chatMessage);
-            if (GUI.Button(new Rect(360, 340, 40, 40), sendButtonTexture, GUIStyle.none))
+            
+            // ReSharper disable once InvertIf
+            if (GUI.Button(new Rect(360, 340, 40, 40), sendButtonTexture, GUIStyle.none) || Event.current.keyCode is KeyCode.Return)
             {
+                if(_chatMessage.Length > 0)
+                {
+                    chatManager.SendChatMessage(new Message("Demo", "DemoUser", _chatMessage, DateTime.Now));
+                }
                 _chatMessage = string.Empty;
-                // ToDo: Send message
             }
-
-            if (Event.current.keyCode == KeyCode.Return)
+            
+            var messages = chatManager.GetChatMessages();
+            _scrollPosition = GUI.BeginScrollView(new Rect(0, 50, 400, 300), _scrollPosition, new Rect(0, 0, 380, messages.Length * 20));
+            _scrollPosition = new Vector2(_scrollPosition.x, messages.Length * 20);
+            for (var i = 0; i < messages.Length; i++)
             {
-                _chatMessage = string.Empty;
-                // ToDo: Send message
+                GUI.Label(new Rect(0, i * 20, 380, 20), messages[i].ToString());
             }
+            GUI.EndScrollView();
         }
     }
 }
