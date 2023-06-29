@@ -4,6 +4,9 @@ using Zenject;
 
 namespace Lobby.Chat
 {
+    /// <summary>
+    /// Class for managing chat
+    /// </summary>
     public class ChatManager : MonoBehaviour
     {
         [Inject]

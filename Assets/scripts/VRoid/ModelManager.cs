@@ -1,15 +1,20 @@
 using Lobby;
 using Pixiv.VroidSdk;
+using UnityEditor.Animations;
 using UnityEngine;
 using Zenject;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
 namespace VRoid
 {
+    /// <summary>
+    /// Class for managing VRoid models
+    /// </summary>
     public class ModelManager : MonoBehaviour
     {
         [SerializeField] private Camera vcam;
         [Inject] private DiContainer _container;
+        [Inject] private AnimatorController _animatorController;
         
         private void Start()
         {
@@ -21,11 +26,15 @@ namespace VRoid
                     vrm.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     vrm.transform.localScale = Vector3.one;
                     
+                    var animator = vrm.GetComponent<Animator>();
+                    animator.runtimeAnimatorController = _animatorController;
+                    
                     vcam.transform.SetParent(vrm.transform);
                     vcam.transform.localPosition = new Vector3(0, 1f, -2);
                     vcam.transform.localEulerAngles = new Vector3(0, 0, 0);
 
-                    _container.InstantiateComponent<PlayerControl>(vrm);
+                    var control = _container.InstantiateComponent<PlayerControl>(vrm);
+                    control.animator = animator;
                     
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                     var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y - vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;

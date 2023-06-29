@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace IO
 {
+    /// <summary>
+    /// Class for providing view point from mouse
+    /// </summary>
     public class ViewPointFromMouse : IViewPointProvider
     {
         public float GetHorizontalViewPoint()

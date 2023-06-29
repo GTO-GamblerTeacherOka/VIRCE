@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Lobby.Chat
 {
+    /// <summary>
+    /// Class for chat message
+    /// </summary>
     public class Message
     {
         public readonly string Id;

@@ -5,6 +5,9 @@ using IO;
 
 namespace Lobby
 {
+    /// <summary>
+    /// Class for controlling camera vertical rotation
+    /// </summary>
     public class CameraControl : MonoBehaviour
     {
         [Inject]

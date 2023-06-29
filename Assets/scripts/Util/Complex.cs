@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Util
 {
+    /// <summary>
+    /// Complex number struct with float precision
+    /// </summary>
     public readonly struct Complex: IEquatable<Complex>, IComparable<Complex>, IFormattable
     {
         public readonly float Real;

@@ -1,3 +1,4 @@
+using System;
 using IO;
 using UnityEngine;
 using Zenject;
@@ -5,6 +6,9 @@ using Zenject;
 
 namespace Lobby
 {
+    /// <summary>
+    /// Class for controlling player
+    /// </summary>
     public class PlayerControl : MonoBehaviour
     {
         [Inject]
@@ -17,28 +21,22 @@ namespace Lobby
         [SerializeField]
         private float viewPointSpeed = 1.0f;
 
+        public Animator animator;
+
         private void Update()
         {
-            var moveDirection = _moveProvider.GetMoveDirection();
-            var dPos = Vector3.zero;
-            if((moveDirection & IMoveProvider.MoveDirection.Forward)is not 0)
-            {
-                dPos += transform.forward;
-            }
-            if((moveDirection & IMoveProvider.MoveDirection.Back)is not 0)
-            {
-                dPos -= transform.forward;
-            }
-            if((moveDirection & IMoveProvider.MoveDirection.Left)is not 0)
-            {
-                dPos -= transform.right;
-            }
-            if((moveDirection & IMoveProvider.MoveDirection.Right)is not 0)
-            {
-                dPos += transform.right;
-            }
+            var move = _moveProvider.GetMove().Normalize.ToVector3;
+
+            transform.position += move * Math.Abs(moveSpeed * Time.deltaTime);
             
-            transform.position += dPos.normalized * (moveSpeed * Time.deltaTime);
+            if (move != Vector3.zero)
+            {
+                animator.SetFloat("speed", 1.0f);
+            }
+            else
+            {
+                animator.SetFloat("speed", 0);
+            }
             
             var horizontalViewPoint = _viewPointProvider.GetHorizontalViewPoint();
             transform.RotateAround(transform.position, Vector3.up, horizontalViewPoint * (viewPointSpeed * Time.deltaTime));

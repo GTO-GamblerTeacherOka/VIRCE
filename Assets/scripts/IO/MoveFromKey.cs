@@ -1,29 +1,33 @@
 using UnityEngine;
+using Util;
 
 namespace IO
 {
+    /// <summary>
+    /// Class for providing move direction from key
+    /// </summary>
     public class MoveFromKey : IMoveProvider
     {
-        public IMoveProvider.MoveDirection GetMoveDirection()
+        public Complex GetMove()
         {
-            IMoveProvider.MoveDirection direction = 0;
+            var moveComplex = new Complex(0, 0);
             if (Input.GetKey(KeyCode.W))
             {
-                direction |= IMoveProvider.MoveDirection.Forward;
+                moveComplex += new Complex(0, 1);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                direction |= IMoveProvider.MoveDirection.Back;
+                moveComplex += new Complex(0, -1);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                direction |= IMoveProvider.MoveDirection.Left;
+                moveComplex += new Complex(-1, 0);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                direction |= IMoveProvider.MoveDirection.Right;
+                moveComplex += new Complex(1, 0);
             }
-            return direction;
+            return moveComplex;
         }
     }
 }

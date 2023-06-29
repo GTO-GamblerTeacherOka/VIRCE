@@ -5,6 +5,9 @@ using Zenject;
 
 namespace Launch
 {
+    /// <summary>
+    /// Class for managing launch scene
+    /// </summary>
     public class LaunchManager : MonoBehaviour
     {
         [Inject]

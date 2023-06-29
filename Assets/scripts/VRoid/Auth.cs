@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace VRoid
 {
+    /// <summary>
+    /// Class for managing VRoid authentication
+    /// </summary>
     public static class Auth
     {
         private static IManualCodeRegistrable _browser;

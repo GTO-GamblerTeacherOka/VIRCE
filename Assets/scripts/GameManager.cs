@@ -2,6 +2,9 @@ using Pixiv.VroidSdk;
 using UnityEngine;
 using VRoid;
 
+/// <summary>
+/// Class for managing game
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;

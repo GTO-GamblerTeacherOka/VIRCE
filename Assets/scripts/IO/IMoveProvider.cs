@@ -1,17 +1,12 @@
-using System;
+using Util;
 
 namespace IO
 {
+    /// <summary>
+    /// Interface for providing move direction
+    /// </summary>
     public interface IMoveProvider
     {
-        [Flags]
-        public enum MoveDirection
-        {
-            Forward = 1,
-            Back = 2,
-            Left = 4,
-            Right = 8,
-        }
-        public MoveDirection GetMoveDirection();
+        public Complex GetMove();
     }
 }
