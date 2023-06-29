@@ -1,7 +1,10 @@
 using System;
+using Util;
 using IO;
 using UnityEngine;
 using Zenject;
+using Vector3 = UnityEngine.Vector3;
+
 // ReSharper disable Unity.InefficientPropertyAccess
 
 namespace Lobby
@@ -25,10 +28,11 @@ namespace Lobby
 
         private void Update()
         {
-            var move = _moveProvider.GetMove().Normalize.ToVector3;
-            #if UNITY_EDITOR
-            Debug.Log(move.ToString());
-            #endif
+            var moveComplex = _moveProvider.GetMove();
+            var rot = transform.eulerAngles;
+            Debug.Log(rot.ToString());
+            var rotationComplex = new Complex(transform.eulerAngles, true);
+            var move = -(moveComplex / rotationComplex).Normalize.ToVector3;
 
             transform.position += move * Math.Abs(moveSpeed * Time.deltaTime);
             
