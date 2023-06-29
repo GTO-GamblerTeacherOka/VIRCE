@@ -26,6 +26,9 @@ namespace Lobby
         private void Update()
         {
             var move = _moveProvider.GetMove().Normalize.ToVector3;
+            #if UNITY_EDITOR
+            Debug.Log(move.ToString());
+            #endif
 
             transform.position += move * Math.Abs(moveSpeed * Time.deltaTime);
             
