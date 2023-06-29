@@ -17,6 +17,17 @@ namespace Util
             Imaginary = imaginary;
         }
 
+        public Complex(Vector3 rot, bool isDeg = false)
+        {
+            var y = rot.y;
+            if (isDeg)
+            {
+                y *= MathF.PI / 180.0f;
+            }
+            Real = MathF.Cos(y);
+            Imaginary = MathF.Sin(y);
+        }
+
         private unsafe float Invsqrt()
         {
             var x = Real * Real +Imaginary * Imaginary;
