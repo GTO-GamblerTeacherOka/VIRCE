@@ -3,7 +3,6 @@ using Util;
 using IO;
 using UnityEngine;
 using Zenject;
-using Vector3 = UnityEngine.Vector3;
 
 // ReSharper disable Unity.InefficientPropertyAccess
 
@@ -22,7 +21,7 @@ namespace Lobby
         [SerializeField]
         private float moveSpeed = 1.0f;
         [SerializeField]
-        private float viewPointSpeed = 1.0f;
+        private float viewPointSpeed = 10.0f;
 
         public Animator animator;
 
@@ -32,7 +31,7 @@ namespace Lobby
             var rot = transform.eulerAngles;
             Debug.Log(rot.ToString());
             var rotationComplex = new Complex(transform.eulerAngles, true);
-            var move = -(moveComplex / rotationComplex).Normalize.ToVector3;
+            var move = (moveComplex * rotationComplex.Conjugate).Normalize.ToVector3;
 
             transform.position += move * Math.Abs(moveSpeed * Time.deltaTime);
             

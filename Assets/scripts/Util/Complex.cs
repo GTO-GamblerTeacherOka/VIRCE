@@ -46,6 +46,7 @@ namespace Util
         public float Magnitude => 1 / Invsqrt();
         public float SqrMagnitude => Real * Real + Imaginary * Imaginary;
         public float Phase => MathF.Atan2(Imaginary, Real);
+        public Complex Conjugate => new(Real, -Imaginary);
         
         public Complex Normalize => this * Invsqrt();
         public Vector3 ToVector3 => new(Real, 0.0f, Imaginary);
