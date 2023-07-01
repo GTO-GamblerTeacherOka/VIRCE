@@ -1,6 +1,5 @@
 using Lobby;
 using Pixiv.VroidSdk;
-using UnityEditor.Animations;
 using UnityEngine;
 using Zenject;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -14,7 +13,7 @@ namespace VRoid
     {
         [SerializeField] private Camera vcam;
         [Inject] private DiContainer _container;
-        [Inject] private AnimatorController _animatorController;
+        [Inject] private RuntimeAnimatorController _animatorController;
         
         private void Start()
         {
