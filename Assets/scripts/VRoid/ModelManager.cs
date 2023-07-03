@@ -21,6 +21,8 @@ namespace VRoid
             {
                 ModelLoader.LoadVrm(models[0], vrm =>
                 {
+                    vrm.gameObject.layer = 11;
+                    
                     vrm.transform.localPosition = new Vector3(0, 0, 0);
                     vrm.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     vrm.transform.localScale = Vector3.one;
@@ -47,6 +49,7 @@ namespace VRoid
                     rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation
                                                      | RigidbodyConstraints.FreezePositionX
                                                      | RigidbodyConstraints.FreezePositionZ;
+                    rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
                 }, progress =>
                 {
                     Debug.Log(progress);
