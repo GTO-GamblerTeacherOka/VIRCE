@@ -40,6 +40,9 @@ namespace Lobby
                 
                 obj.transform.position = vec;
                 obj.transform.eulerAngles = anglevec;
+                
+                //todo:send data to server
+                
             }
         }
     }
