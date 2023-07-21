@@ -1,0 +1,112 @@
+License
+
+VRoid SDK is not an OSS.
+It is licensed under the following terms and guidelines.
+
+terms: https://app.box.com/s/zha9ppoqiy7ijs3t3j7kkddc8lz1ibcb
+guidelines: https://vroid.pixiv.help/hc/ja/articles/900000213643
+
+----------
+
+UniVRM
+
+MIT License
+
+Copyright (c) 2020 VRM Consortium
+Copyright (c) 2018 Masataka SUMI for MToon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+----------
+
+This code is a modified version of the following code.
+https://stackoverflow.com/questions/223063/how-can-i-create-an-httplistener-class-on-a-random-port-in-c/3978040#3978040
+
+```
+- public static int GetRandomUnusedPort()
++ private static int GetRandomUnusedPort()
+{
+-    var listener = new TcpListener(IPAddress.Any, 0);
++    var listener = new TcpListener(IPAddress.Loopback, 0);
+    listener.Start();
+    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+    listener.Stop();
+    return port;
+}
+
+```
+
+The above modified code is licensed under CC BY-SA 2.5.
+https://creativecommons.org/licenses/by-sa/2.5/deed.en
+
+
+----------
+
+This code is a modified version of the following code.
+https://stackoverflow.com/a/56961044
+
+```
+- private IntPtr unityWindow;
+
+[DllImport("user32.dll")]
+- static extern IntPtr GetActiveWindow();
++ public static extern IntPtr GetActiveWindow();
+
+[DllImport("user32.dll")]
+static extern bool SetForegroundWindow(IntPtr hWnd);
+
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+
+const int ALT = 0xA4;
+const int EXTENDEDKEY = 0x1;
+const int KEYUP = 0x2;
+
+- private void SendUser()
+- {
+-    unityWindow = GetActiveWindow();
+
+-    Application.OpenURL("http://example.com");
+
+-    StartCoroutine(RefocusWindow(30f));
+- }
+
+
+- private IEnumerator RefocusWindow(float waitSeconds) {
++ public static void SetApplicationFocus(IntPtr hWnd)
++ {
+-    // wait for new window to appear
+-    yield return new WaitWhile(() => unityWindow == GetActiveWindow());
+
+-    yield return new WaitForSeconds(waitSeconds);
+
+    // Simulate alt press
+    keybd_event((byte)ALT, 0x45, EXTENDEDKEY | 0, 0);
+
+    // Simulate alt release
+    keybd_event((byte)ALT, 0x45, EXTENDEDKEY | KEYUP, 0);
+
+-    SetForegroundWindow(unityWindow);
++    SetForegroundWindow(hWnd);
+}
+
+```
+
+The above modified code is licensed under CC BY-SA 4.0.
+https://creativecommons.org/licenses/by-sa/4.0/
