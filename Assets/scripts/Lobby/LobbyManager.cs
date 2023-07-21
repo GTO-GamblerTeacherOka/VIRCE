@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,7 @@ namespace Lobby
     /// </summary>
     public class LobbyManager : MonoBehaviour
     {
-        public static Dictionary<string, GameObject> Player;
+        public static Dictionary<string, GameObject> userObjects;
         
-
     }
 }
