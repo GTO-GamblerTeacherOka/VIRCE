@@ -23,8 +23,15 @@ namespace Lobby
                 BitConverter.ToSingle(x), 
                 BitConverter.ToSingle(y), 
                 BitConverter.ToSingle(z));
-            
-            
+
+            var anglex = body[12..16];
+            var angley = body[16..20];
+            var anglez = body[20..24];
+
+            var anglevec = new Vector3(
+                BitConverter.ToSingle(anglex),
+                BitConverter.ToSingle(angley),
+                BitConverter.ToSingle(anglez));
         }
     }
 }
