@@ -11,6 +11,11 @@ namespace Lobby
     {
         private static Dictionary<string, GameObject> _userObjects;
 
+        private async void Send()
+        {
+            //todo:send data
+        }
+
         public void Update()
         {
             foreach (var keyValuePair in _userObjects)
