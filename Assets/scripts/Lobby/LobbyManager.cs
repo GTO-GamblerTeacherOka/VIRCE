@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Lobby
@@ -10,10 +11,31 @@ namespace Lobby
     public class LobbyManager : MonoBehaviour
     {
         private static Dictionary<string, GameObject> _userObjects;
+        private static GameObject _currentUserGameObject;
 
         private async void Send()
         {
-            //todo:send data
+            //todo:create body
+            var sendvec = new float[]
+            {
+                _currentUserGameObject.transform.position.x,
+                _currentUserGameObject.transform.position.y,
+                _currentUserGameObject.transform.position.z
+            };
+            var sendanglevec = new float[]
+            {
+                _currentUserGameObject.transform.eulerAngles.x,
+                _currentUserGameObject.transform.eulerAngles.y,
+                _currentUserGameObject.transform.eulerAngles.z
+            };
+            var vf = sendvec.Concat(sendanglevec).ToArray();
+            var body = new byte[24];
+            for (var i = 0; i < vf.Length; i++)
+            {
+                var b = BitConverter.GetBytes(vf[i]);
+                Array.Copy(b, 0, body, i * 4, 4);
+            }
+            //todo:send data with header
         }
 
         public void Update()
@@ -25,10 +47,10 @@ namespace Lobby
                 
                 //TODO:get data from DataBuf
                 var body = new byte[24];
+                
                 var x = body[0..4];
                 var y = body[4..8];
                 var z = body[8..12];
-
                 var vec = new Vector3(
                     BitConverter.ToSingle(x), 
                     BitConverter.ToSingle(y), 
@@ -45,8 +67,6 @@ namespace Lobby
                 
                 obj.transform.position = vec;
                 obj.transform.eulerAngles = anglevec;
-                
-                //todo:send data to server
                 
             }
         }
