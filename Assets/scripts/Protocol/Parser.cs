@@ -5,7 +5,7 @@ using Protocol;
 using Unity.Profiling.LowLevel.Unsafe;
 using UnityEngine;
 
-public static class Parser
+public static class Parser 
 {
     public enum Flag{
         PositionData = 0,
