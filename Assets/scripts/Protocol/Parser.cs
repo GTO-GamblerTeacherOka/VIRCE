@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Protocol;
 using Unity.Profiling.LowLevel.Unsafe;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public static class Parser
 
     private const int HeaderSize = 2;
 
-    public static (byte[] header, byte[] body)split(in byte[] data)
+    public static (byte[] header, byte[] body) Split(in byte[] data)
     {
         return (data[..HeaderSize], data[HeaderSize..]);
     }
@@ -53,5 +54,16 @@ public static class Parser
 
         return data;
     }
-    
+
+    public static (int userID,byte[] body) GetData(byte[] data)
+    {
+        byte[] header, body;
+        ushort userID;
+
+        (header,body) = Split(data);
+        (_,userID,_) = AnalyzeHeader(header);
+
+        return (userID, body);
+    }
+
 }
