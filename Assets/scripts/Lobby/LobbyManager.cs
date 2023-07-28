@@ -80,5 +80,10 @@ namespace Lobby
         {
             Send();
         }
+
+        public void SetCurrentGameObject(GameObject playerGameObject)
+        {
+            _currentUserGameObject = playerGameObject;
+        }
     }
 }
