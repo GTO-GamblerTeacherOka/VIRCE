@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using static Cysharp.Threading.Tasks.UniTask;
 
 namespace Lobby
 {
@@ -13,22 +15,21 @@ namespace Lobby
         private static Dictionary<string, GameObject> _userObjects;
         private static GameObject _currentUserGameObject;
 
-        private async void Send()
+        private void Send()
         {
-            //todo:create body
-            var sendvec = new float[]
+            var sendVec = new float[]
             {
                 _currentUserGameObject.transform.position.x,
                 _currentUserGameObject.transform.position.y,
                 _currentUserGameObject.transform.position.z
             };
-            var sendanglevec = new float[]
+            var sendAngleVec = new float[]
             {
                 _currentUserGameObject.transform.eulerAngles.x,
                 _currentUserGameObject.transform.eulerAngles.y,
                 _currentUserGameObject.transform.eulerAngles.z
             };
-            var vf = sendvec.Concat(sendanglevec).ToArray();
+            var vf = sendVec.Concat(sendAngleVec).ToArray();
             var body = new byte[24];
             for (var i = 0; i < vf.Length; i++)
             {
@@ -36,9 +37,13 @@ namespace Lobby
                 Array.Copy(b, 0, body, i * 4, 4);
             }
             //todo:send data with header
+            UniTask.Run(() =>
+            {
+
+            });
         }
 
-        public void Update()
+        private void Update()
         {
             foreach (var keyValuePair in _userObjects)
             {
@@ -56,19 +61,24 @@ namespace Lobby
                     BitConverter.ToSingle(y), 
                     BitConverter.ToSingle(z));
 
-                var anglex = body[12..16];
-                var angley = body[16..20];
-                var anglez = body[20..24];
+                var angleX = body[12..16];
+                var angleY = body[16..20];
+                var angleZ = body[20..24];
 
-                var anglevec = new Vector3(
-                    BitConverter.ToSingle(anglex),
-                    BitConverter.ToSingle(angley),
-                    BitConverter.ToSingle(anglez));
+                var angleVec = new Vector3(
+                    BitConverter.ToSingle(angleX),
+                    BitConverter.ToSingle(angleY),
+                    BitConverter.ToSingle(angleZ));
                 
                 obj.transform.position = vec;
-                obj.transform.eulerAngles = anglevec;
+                obj.transform.eulerAngles = angleVec;
                 
             }
+        }
+
+        private void FixedUpdate()
+        {
+            Send();
         }
     }
 }
