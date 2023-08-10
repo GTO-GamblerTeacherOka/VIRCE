@@ -72,3 +72,16 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .idea/
+
+Assets/VRoidSDK
+Assets/VRoidSDK.meta
+Assets/Sci-Fi UI
+Assets/Sci-Fi UI.meta
+Assets/Resources/credential.json.bytes
+Assets/Resources/credential.json.bytes.meta
+Assets/Plugins/Zenject
+Assets/Plugins/Zenject.meta
+Assets/Plugins/UniTask
+Assets/Plugins/UniTask.meta
+Assets/_DLNK
+Assets/_DLNK.meta
