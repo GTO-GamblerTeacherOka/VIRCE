@@ -1,10 +1,12 @@
 using UnityEngine;
+using Zenject;
+using IO;
 
-public class CameraControl : MonoBehaviour
+namespace Lace
 {
-    // Update is called once per frame
-    private void Update()
+    public class CameraControl : MonoBehaviour
     {
         
     }
 }
+
