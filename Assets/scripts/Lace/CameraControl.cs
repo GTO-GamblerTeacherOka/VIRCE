@@ -4,13 +4,13 @@ namespace Lace
 {
     public class CameraControl : MonoBehaviour
     {
-        [SerializeField] private Camera vcam;
+        [SerializeField] private Camera camera;
 
         private void Start()
         {
-            vcam.transform.SetParent();
-            vcam.transform.localPosition = new Vector3(0, 1f, -2);
-            vcam.transform.localEulerAngles = new Vector3(0, 0, 0);
+            camera.transform.SetParent(transform);
+            camera.transform.localPosition = new Vector3(0, 1f, -2);
+            camera.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
     }
 }
