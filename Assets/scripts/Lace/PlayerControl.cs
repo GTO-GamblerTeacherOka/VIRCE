@@ -1,3 +1,5 @@
+using System;
+using Util;
 using IO;
 using UnityEngine;
 using Zenject;
@@ -18,7 +20,9 @@ namespace Lace
 
        private void Update()
        {
-           
+           var moveComplex = _moveProvider.GetMove();
+           var rotationComplex = new Complex(transform.eulerAngles, true);
+           var move = (moveComplex * rotationComplex.Conjugate).Normalize.ToVector3 * Math.Abs(moveSpeed * Time.deltaTime);
        }
    } 
 }
