@@ -8,7 +8,10 @@ namespace Lace
        [SerializeField]
        private float moveSpeed = 1.0f;
 
-       void Update()
+       private bool _isColliding;
+       private Vector3 _move;
+
+       private void Update()
        {
            
        }
