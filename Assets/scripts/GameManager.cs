@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             Auth.Init();
             ModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
+            MultiplayModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
             Application.targetFrameRate = 60;
         }
         else
