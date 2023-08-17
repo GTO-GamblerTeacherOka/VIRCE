@@ -169,7 +169,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chatManager: {fileID: 600102569}
   chatButtonTexture: {fileID: 2800000, guid: e75f052c3635986458af170a925d0a42, type: 3}
-  closeButtonTexture: {fileID: 2800000, guid: 601730e06366c4647b0e883edf1b67e0, type: 3}
   sendButtonTexture: {fileID: 2800000, guid: e05004e4bcd8b3e49bb0cbaab0215760, type: 3}
 --- !u!1 &298934458
 GameObject:

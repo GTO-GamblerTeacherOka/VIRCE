@@ -56,5 +56,11 @@ namespace Networking
                 }
             });
         }
+
+        public void Send(byte[] data)
+        {
+            _remoteEp = Settings.GameSetting.RemoteEndPoint;
+            _client.Send(data, data.Length, _remoteEp);
+        }
     }
 }
