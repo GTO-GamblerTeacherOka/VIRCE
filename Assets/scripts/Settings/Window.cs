@@ -32,18 +32,20 @@ namespace Settings
             GUI.skin = _skin;
             if (_showLicense)
             {
-                _windowRect = GUI.Window(0, _windowRect, DrawLicense, "License");
-                return;
-            }
-            if (_showWindow)
-            {
-                _windowRect = GUI.Window(0, _windowRect, DrawWindow, "Settings");
+                _windowRect = GUI.Window(1000, _windowRect, DrawLicense, "License");
             }
             else
             {
-                if (GUI.Button(new Rect(_screenSize.x - 220, 20, 200, 20), "Settings"))
+                if (_showWindow)
                 {
-                    _showWindow = true;
+                    _windowRect = GUI.Window(1000, _windowRect, DrawWindow, "Settings");
+                }
+                else
+                {
+                    if (GUI.Button(new Rect(_screenSize.x - 220, 20, 200, 20), "Settings"))
+                    {
+                        _showWindow = true;
+                    }
                 }
             }
         }
