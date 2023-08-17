@@ -7,6 +7,8 @@ namespace Settings
         public static IPEndPoint RemoteEndPoint { get; private set; }
         public static string UserName { get; private set; }
         public static string ModelId { get; private set; }
+        public static int RoomId { get; private set; }
+        public static int UserId { get; private set; }
 
         static GameSetting()
         {
@@ -27,6 +29,16 @@ namespace Settings
         public static void SetModelId(string modelId)
         {
             ModelId = modelId;
+        }
+        
+        public static void SetRoomId(int roomId)
+        {
+            RoomId = roomId;
+        }
+        
+        public static void SetUserId(int userId)
+        {
+            UserId = userId;
         }
     }
 }
