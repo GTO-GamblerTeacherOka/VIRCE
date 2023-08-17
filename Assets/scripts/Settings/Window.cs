@@ -1,3 +1,4 @@
+using System.Net;
 using UnityEngine;
 using Zenject;
 
@@ -9,13 +10,17 @@ namespace Settings
         
         [Inject]
         private GUISkin _skin;
+        [Inject(Id = "closeButtonTexture")]
+        private Texture2D _closeButtonTexture;
 
         private Rect _windowRect;
         private Vector2 _screenSize = new(0, 0);
         private bool _showWindow;
         private bool _showLicense;
         private Vector2 _scrollPosition = new(0, 0);
-        [Inject(Id = "closeButtonTexture")] private Texture2D _closeButtonTexture;
+        private string _ipAddress;
+        private string _port;
+        private string _userName;
 
         private void Start()
         {
@@ -59,6 +64,34 @@ namespace Settings
             if (GUI.Button(new Rect(100, 100, 200, 20), "License"))
             {
                 _showLicense = true;
+            }
+            
+            // for debug
+            GUI.Label(new Rect(100, 150, 100, 20), "IP Address");
+            GUI.Label(new Rect(100, 200, 100, 20), "Port");
+            _ipAddress = GUI.TextField(new Rect(200, 150, 100, 20), _ipAddress);
+            _port = GUI.TextField(new Rect(200, 200, 100, 20), _port);
+            if (GUI.Button(new Rect(100, 250, 200, 20), "Apply"))
+            {
+                try
+                {
+                    var ep = new IPEndPoint(IPAddress.Parse(_ipAddress), int.Parse(_port));
+                    GameSetting.SetRemoteEndPoint(ep);
+                    Debug.Log("Save success");
+                }
+                catch
+                {
+                    _ipAddress = string.Empty;
+                    _port = string.Empty;
+                }
+            }
+            // for debug end
+            
+            GUI.Label(new Rect(100, 300, 100, 20), "User Name");
+            _userName = GUI.TextField(new Rect(200, 300, 100, 20), _userName);
+            if(GUI.Button(new Rect(100, 350, 200, 20), "Name Change"))
+            {
+                GameSetting.SetUserName(_userName);
             }
         }
 
