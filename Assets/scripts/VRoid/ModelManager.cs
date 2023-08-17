@@ -3,6 +3,7 @@ using Pixiv.VroidSdk;
 using UnityEngine;
 using Zenject;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
+// ReSharper disable Unity.InefficientPropertyAccess
 
 namespace VRoid
 {
