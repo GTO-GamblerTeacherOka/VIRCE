@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 64821157}
   - component: {fileID: 64821158}
+  - component: {fileID: 64821159}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -171,6 +172,18 @@ MonoBehaviour:
   chatButtonTexture: {fileID: 2800000, guid: e75f052c3635986458af170a925d0a42, type: 3}
   closeButtonTexture: {fileID: 2800000, guid: 601730e06366c4647b0e883edf1b67e0, type: 3}
   sendButtonTexture: {fileID: 2800000, guid: e05004e4bcd8b3e49bb0cbaab0215760, type: 3}
+--- !u!114 &64821159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64821156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d9a96b6d1ff7c41ae27f1626432c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &298934458
 GameObject:
   m_ObjectHideFlags: 0
