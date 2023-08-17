@@ -7,6 +7,12 @@ namespace Settings
         public static IPEndPoint RemoteEndPoint { get; private set; }
         public static string UserName { get; private set; }
         public static string ModelId { get; private set; }
+
+        static GameSetting()
+        {
+            var ip = IPAddress.Parse("127.0.0.1");
+            RemoteEndPoint = new IPEndPoint(ip, 5000);
+        }
         
         public static void SetRemoteEndPoint(IPEndPoint endPoint)
         {
