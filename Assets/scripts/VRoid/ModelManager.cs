@@ -67,5 +67,13 @@ namespace VRoid
                 }, _ => {});
             }, _ =>{});
         }
+
+        public void LoadOtherPlayerModel(string modelId)
+        {
+            MultiplayModelLoader.LoadVrm(modelId, vrm =>
+            {
+                //TODO: set user info
+            },_=>{}, _ => {});
+        }
     }
 }
