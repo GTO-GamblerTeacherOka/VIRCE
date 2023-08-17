@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using Lobby;
 using Pixiv.VroidSdk;
+using Pixiv.VroidSdk.Api;
 using UnityEngine;
 using Zenject;
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
@@ -20,7 +22,15 @@ namespace VRoid
         {
             Auth.Api.GetAccountCharacterModels(10, models =>
             {
-                ModelLoader.LoadVrm(models[0], vrm =>
+                var model = models[0];
+                var modelId = model.id;
+                var multiplayApi = new MultiplayApi(Auth.OauthClient);
+                UniTask.RunOnThreadPool(async () =>
+                {
+                    var license = await multiplayApi.PostDownloadLicensesAsync(modelId);
+                    // TODO: send model license to server
+                }).Forget();
+                ModelLoader.LoadVrm(model, vrm =>
                 {
                     vrm.gameObject.layer = 11;
                     
