@@ -11,6 +11,9 @@ public class PlayerControler : MonoBehaviour
     private IMoveProvider _moveProvider;
     [Inject]
     private IViewPointProvider _viewPointProvider;
+
+    [SerializeField] 
+    private float moveSpeed = 1.0f;
     
     // Start is called before the first frame update
     void Start()
