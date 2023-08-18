@@ -5,8 +5,17 @@ namespace Protocol
     public class Buffer
     {
         private readonly Dictionary<int, byte[]> _dictionary;
+        private static Buffer _instance;
 
-        public Buffer()
+        public static Buffer Instance
+        {
+            get
+            {
+                return _instance ??= new Buffer();
+            }
+        }
+
+        private Buffer()
         {
             _dictionary = new Dictionary<int, byte[]>();
         }
