@@ -14,6 +14,8 @@ public class PlayerControler : MonoBehaviour
 
     [SerializeField] 
     private float moveSpeed = 1.0f;
+
+    private Vector3 _move;
     
     // Start is called before the first frame update
     void Start()
