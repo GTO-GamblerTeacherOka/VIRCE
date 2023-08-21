@@ -17,15 +17,9 @@ public class PlayerControler : MonoBehaviour
 
     private Vector3 _move;
     
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        var moveComplex = _moveProvider.GetMove();
         
     }
 }
