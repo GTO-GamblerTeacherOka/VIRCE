@@ -1,7 +1,9 @@
+using Networking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VRoid;
 using Zenject;
+using Protocol;
 
 namespace Launch
 {
@@ -34,6 +36,8 @@ namespace Launch
             {
                 Auth.Login(() =>
                 {
+                    var entryPacket = PacketCreator.EntryPacket(PacketCreator.EntryType.Lobby);
+                    Socket.Instance.Send(entryPacket);
                     SceneManager.LoadScene("main");
                 });
             }
