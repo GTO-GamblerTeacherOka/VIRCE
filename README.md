@@ -10,9 +10,10 @@ V.I.R.C.E is a service for user to communicate and play with other users in a vi
 
 ## Dependency Packages
 - VRoid SDK
-- VRoid SDK for Multiplayer
+- VRoid SDK for Multiplay Extention
 - Extenject
 - UniRx
+- UniTask
 - SciFi UI
 - SciFi Platform City
 
