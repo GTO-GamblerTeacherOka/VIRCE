@@ -21,5 +21,12 @@ public class PlayerControler : MonoBehaviour
     {
         var moveComplex = _moveProvider.GetMove();
         var rotationComplex = new Complex(transform.eulerAngles, true);
+
+        transform.position += rotationComplex.Conjugate.Normalize.ToVector3 * moveSpeed;
+        
+        //todo: rotate player the Y axis
+        var horizontalRotation = (moveComplex * rotationComplex.Conjugate).Normalize.ToVector3;
+        transform.RotateAround(transform.position, Vector3.up, (horizontalRotation * (moveSpeed * Time.deltaTime)).magnitude);
+        //todo: rotate camera the X axis
     }
 }
