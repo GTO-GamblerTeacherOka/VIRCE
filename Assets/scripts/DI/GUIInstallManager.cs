@@ -7,10 +7,12 @@ namespace DI
     {
         [SerializeField]
         private GUISkin skin;
+        [SerializeField]
+        private Texture2D closeButtonTexture;
         
         public override void InstallBindings()
         {
-            GUIInstaller.Install(Container, skin);
+            GUIInstaller.Install(Container, skin, closeButtonTexture);
         }
     }
 }
