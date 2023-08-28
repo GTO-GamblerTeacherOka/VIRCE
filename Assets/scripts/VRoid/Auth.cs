@@ -16,7 +16,7 @@ namespace VRoid
     {
         private static IManualCodeRegistrable _browser;
         public static ISdkConfig SDKConfig;
-        private static Client _oauthClient;
+        public static Client OauthClient;
         public static DefaultApi Api;
         public static Account UserAccount;
 
@@ -26,14 +26,14 @@ namespace VRoid
             var configText = sdkConfigJson.text;
             SDKConfig = OauthProvider.CreateSdkConfig(configText);
             var driver = new Pixiv.VroidSdk.Networking.Drivers.HttpClientDriver(SynchronizationContext.Current);
-            _oauthClient = OauthProvider.CreateOauthClient(SDKConfig, driver);
-            Api = new DefaultApi(_oauthClient);
-            _browser = BrowserProvider.Create(_oauthClient, SDKConfig);
+            OauthClient = OauthProvider.CreateOauthClient(SDKConfig, driver);
+            Api = new DefaultApi(OauthClient);
+            _browser = BrowserProvider.Create(OauthClient, SDKConfig);
         }
 
         public static void Login(Action callBack = null)
         {
-            _oauthClient.Login(_browser, account =>
+            OauthClient.Login(_browser, account =>
             {
                 UserAccount = account;
                 callBack?.Invoke();
@@ -47,7 +47,7 @@ namespace VRoid
         
         public static void Logout()
         {
-            _oauthClient.ReleaseAuthorizedAccount();
+            OauthClient.ReleaseAuthorizedAccount();
         }
     }
 }

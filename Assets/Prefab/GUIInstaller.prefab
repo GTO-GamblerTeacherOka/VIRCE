@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skin: {fileID: 11400000, guid: 9705c0e7595e14d42bcd9e476468d8d7, type: 2}
+  closeButtonTexture: {fileID: 2800000, guid: 601730e06366c4647b0e883edf1b67e0, type: 3}
