@@ -23,7 +23,7 @@ namespace Lobby.Chat
         private Vector2 _scrollPosition = new(0, 0);
         
         [SerializeField] private Texture2D chatButtonTexture;
-        [SerializeField] private Texture2D closeButtonTexture;
+        [Inject(Id = "closeButtonTexture")] private Texture2D _closeButtonTexture;
         [SerializeField] private Texture2D sendButtonTexture;
 
         private string _chatMessage = string.Empty;
@@ -54,7 +54,7 @@ namespace Lobby.Chat
 
         private void DrawWindow(int windowID)
         {
-            if(GUI.Button(new Rect(0, -10, 60, 60), closeButtonTexture, GUIStyle.none))
+            if(GUI.Button(new Rect(0, -10, 60, 60), _closeButtonTexture, GUIStyle.none))
             {
                 _showWindow = false;
             }
