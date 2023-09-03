@@ -42,6 +42,14 @@ namespace Lace
 
             });
         }
-    }
+        
+        private void Update()
+        {
+            foreach (var keyValuePair in _userObjects)
+            {
+                var key = keyValuePair.Key;
+                var obj = keyValuePair.Value;
+            }
+        }
 }
 
