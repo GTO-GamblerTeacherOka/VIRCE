@@ -27,6 +27,7 @@ namespace Networking
         {
             _client = new UdpClient(0);
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
+            _isConnected = true;
         }
 
         public void Open()
@@ -34,6 +35,7 @@ namespace Networking
             if (_isConnected is not false) return;
             _client = new UdpClient(0);
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
+            _isConnected = true;
         }
     
         public async UniTask Close()
