@@ -35,21 +35,44 @@ namespace Lace
                 var b = BitConverter.GetBytes(vf[i]);
                 Array.Copy(b, 0, body, i * 4, 4);
             }
-            
+
             //todo:send data with header
             UniTask.Run(() =>
             {
-
+                
             });
         }
-        
+
         private void Update()
         {
             foreach (var keyValuePair in _userObjects)
             {
                 var key = keyValuePair.Key;
                 var obj = keyValuePair.Value;
+                
+                //todo:get data from DataBuf
+                var body = new byte[24];
+                
+                var x = body[0..4];
+                var y = body[4..8];
+                var z = body[8..12];
+                var vec = new Vector3(
+                    BitConverter.ToSingle(x), 
+                    BitConverter.ToSingle(y), 
+                    BitConverter.ToSingle(z));
+                
+                var angleX = body[12..16];
+                var angleY = body[16..20];
+                var angleZ = body[20..24];
+                var angleVec = new Vector3(
+                    BitConverter.ToSingle(angleX), 
+                    BitConverter.ToSingle(angleY), 
+                    BitConverter.ToSingle(angleZ));
+                
+                obj.transform.position = vec;
+                obj.transform.eulerAngles = angleVec;
             }
         }
+    }
 }
 
