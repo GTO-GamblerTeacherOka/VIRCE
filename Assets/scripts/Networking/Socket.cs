@@ -1,33 +1,29 @@
-using System;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
-using Buffer = Protocol.Buffer;
+using Protocol;
+using Settings;
 
 namespace Networking
 {
     public class Socket
     {
         private static Socket _instance;
-
-        public static Socket Instance
-        {
-            get
-            {
-                return _instance ??= new Socket();
-            }
-        }
-
         private UdpClient _client;
-        private IPEndPoint _remoteEp;
-        private IPEndPoint _localEp;
         private bool _isConnected;
-    
+        private IPEndPoint _localEp;
+        private IPEndPoint _remoteEp;
+
         private Socket()
         {
             _client = new UdpClient(0);
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
             _isConnected = true;
+        }
+
+        public static Socket Instance
+        {
+            get { return _instance ??= new Socket(); }
         }
 
         public void Open()
@@ -37,7 +33,7 @@ namespace Networking
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
             _isConnected = true;
         }
-    
+
         public async UniTask Close()
         {
             _isConnected = false;
@@ -48,7 +44,7 @@ namespace Networking
 
         public void StartRecv()
         {
-            UniTask.Void(async() =>
+            UniTask.Void(async () =>
             {
                 while (_isConnected)
                 {
@@ -61,7 +57,7 @@ namespace Networking
 
         public void Send(byte[] data)
         {
-            _remoteEp = Settings.GameSetting.RemoteEndPoint;
+            _remoteEp = GameSetting.RemoteEndPoint;
             _client.Send(data, data.Length, _remoteEp);
         }
     }
