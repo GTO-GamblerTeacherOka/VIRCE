@@ -9,6 +9,7 @@ namespace Lace
     public class LaceManager : MonoBehaviour
     {
         private static Dictionary<string, GameObject> _userObjects;
+        private static GameObject _currentUserGameObject;
     }
 }
 
