@@ -1,4 +1,7 @@
+using System.Text;
+using Settings;
 using UniJSON;
+using UnityEngine.iOS;
 
 namespace Protocol
 {
@@ -10,11 +13,20 @@ namespace Protocol
             MiniGame = 1
         }
         
-        public static byte[] EntryPacket(EntryType type)
+        public static byte[] EntryPacket(EntryType type, string modelID)
         {
             var header = Parser.CreateHeader(Parser.Flag.RoomEntry, 0, 0);
             var body = (byte)type;
-            return header.Concat(new [] { body });
+            var data = header.Concat(new [] { body });
+            data = data.Concat(Encoding.UTF8.GetBytes(modelID));
+            return data;
+        }
+
+        public static byte[] ChatPacket(string chat)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.ChatData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(chat));
+            return data;
         }
     }
 }
