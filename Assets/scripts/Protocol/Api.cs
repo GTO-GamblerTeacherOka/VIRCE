@@ -1,13 +1,22 @@
 using Networking;
-using Protocol;
 using Settings;
 
-public static class Api
+namespace Protocol
 {
-    public static void RoomEntry(PacketCreator.EntryType type)
+    public static class Api
     {
-        var packetData = PacketCreator.EntryPacket(type, GameSetting.ModelPublishId);
+        public static void RoomEntry(PacketCreator.EntryType type)
+        { 
+            var packetData = PacketCreator.EntryPacket(type, GameSetting.ModelPublishId);
 
-       Socket.Instance.Send(packetData);
+            Socket.Instance.Send(packetData);
+        }
+
+        public static void SendChat(string chat)
+        {
+            var packetData = PacketCreator.ChatPacket(chat);
+
+            Socket.Instance.Send(packetData);
+        }
     }
 }

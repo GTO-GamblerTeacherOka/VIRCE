@@ -1,5 +1,7 @@
 using System.Text;
+using Settings;
 using UniJSON;
+using UnityEngine.iOS;
 
 namespace Protocol
 {
@@ -17,6 +19,13 @@ namespace Protocol
             var body = (byte)type;
             var data = header.Concat(new [] { body });
             data = data.Concat(Encoding.UTF8.GetBytes(modelID));
+            return data;
+        }
+
+        public static byte[] ChatPacket(string chat)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.ChatData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(chat));
             return data;
         }
     }
