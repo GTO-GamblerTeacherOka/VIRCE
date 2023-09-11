@@ -10,11 +10,13 @@ namespace Protocol
             MiniGame = 1
         }
         
-        public static byte[] EntryPacket(EntryType type)
+        public static byte[] EntryPacket(EntryType type, string modelID)
         {
             var header = Parser.CreateHeader(Parser.Flag.RoomEntry, 0, 0);
             var body = (byte)type;
-            return header.Concat(new [] { body });
+            var data = header.Concat(new [] { body });
+            data = data.Concat(Encording.UTF8.GetBytes(modelID));
+            return data;
         }
     }
 }
