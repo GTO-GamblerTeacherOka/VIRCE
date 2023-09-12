@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Lobby;
 using Pixiv.VroidSdk;
@@ -16,12 +17,11 @@ namespace VRoid
     /// </summary>
     public class ModelManager : MonoBehaviour
     {
+        private static readonly Dictionary<byte, GameObject> Models = new();
+        private static readonly Dictionary<byte, string> ModelIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
-        
-        private static Dictionary<byte, GameObject> _models = new();
-        private static Dictionary<byte, string> _modelIds = new();
 
         private void Start()
         {
@@ -68,6 +68,12 @@ namespace VRoid
             }).Forget();
         }
 
+        private void Update()
+        {
+            var noLoadedKeys = ModelIds.Keys.ToArray().Where(k => !Models.Keys.Contains(k));
+            foreach (var key in noLoadedKeys) LoadOtherPlayerModel(key, ModelIds[key]);
+        }
+
         public void LoadOtherPlayerModel(byte userId, string modelId)
         {
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
@@ -84,7 +90,7 @@ namespace VRoid
                 vcam.transform.SetParent(vrm.transform);
                 vcam.transform.localPosition = new Vector3(0, 1f, -2);
                 vcam.transform.localEulerAngles = new Vector3(0, 0, 0);
-                
+
                 var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                 var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y -
                              vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
@@ -100,13 +106,13 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-                _models[userId] = vrm;
+                Models[userId] = vrm;
             }, _ => { }, _ => { });
         }
-        
+
         public static void AddModel(byte userId, string modelId)
         {
-            _modelIds[userId] = modelId;
+            ModelIds[userId] = modelId;
         }
     }
 }
