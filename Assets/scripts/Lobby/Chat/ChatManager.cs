@@ -5,15 +5,14 @@ using Zenject;
 namespace Lobby.Chat
 {
     /// <summary>
-    /// Class for managing chat
+    ///     Class for managing chat
     /// </summary>
     public class ChatManager : MonoBehaviour
     {
-        [Inject]
-        private IChatDataBase _chatDataBase;
-        
+        [Inject] private IChatDataBase _chatDataBase;
+
         private ChatManager _instance;
-        
+
         private void Start()
         {
             if (_instance == null)
@@ -31,7 +30,7 @@ namespace Lobby.Chat
         {
             _chatDataBase.AddMessage(msg);
         }
-        
+
         public Message[] GetChatMessages()
         {
             return _chatDataBase.GetMessages();
