@@ -63,7 +63,7 @@ namespace Lobby
                 _isColliding = true;
         }
         
-        private void OnCollisionExit(Collision other)
+        private void OnCollisionExit(Collision other) 
         {
             if(other.transform.gameObject.layer != 6)
                 _isColliding = false;
