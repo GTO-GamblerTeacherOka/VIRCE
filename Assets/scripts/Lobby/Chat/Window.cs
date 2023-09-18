@@ -1,5 +1,8 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using Lobby.Chat.DataBase;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -78,6 +81,38 @@ namespace Lobby.Chat
                 GUI.Label(new Rect(0, i * 20, 380, 20), messages[i].ToString());
             }
             GUI.EndScrollView();
+        }
+
+        private StringBuilder CreateUniqueId()
+        {
+            Message[] msgs = chatManager.GetChatMessages();
+            var uniqueId = new StringBuilder();
+
+            foreach (var msg in msgs)
+            {
+                var beforeUniqueId = string.Empty;
+                var id = msg.Id;
+                var time = msg.Time;
+
+                beforeUniqueId += id;
+                beforeUniqueId += time;
+
+                byte[] beforeByteArray = Encoding.UTF8.GetBytes(beforeUniqueId);
+
+                SHA1 sha1 = SHA1.Create();
+                byte[] afterByteArray = sha1.ComputeHash(beforeByteArray);
+                sha1.Clear();
+
+                StringBuilder afterUniqueId = new StringBuilder();
+                foreach (byte b in afterByteArray)
+                {
+                    afterUniqueId.Append(b.ToString("x2"));
+                }
+
+                uniqueId = afterUniqueId;
+            }
+
+            return uniqueId;
         }
     }
 }
