@@ -41,7 +41,7 @@ namespace Protocol
         {
             str += DateTime.Now;
 
-            const int mod = 65521;
+            const int mod = 1029495;
             uint a = 1, b = 0;
             foreach (char c in str)
             {
