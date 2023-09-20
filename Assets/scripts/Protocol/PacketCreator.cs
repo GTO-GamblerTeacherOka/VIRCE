@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Lobby.Chat;
 using Settings;
@@ -28,8 +29,11 @@ namespace Protocol
 
         public static byte[] ChatPacket(string chat)
         {
+            byte[] id = BitConverter.GetBytes(CreateHash(chat));
+            byte[] txt = Encoding.UTF8.GetBytes(chat);
+
             var header = Parser.CreateHeader(Parser.Flag.ChatData, GameSetting.UserId, GameSetting.RoomId);
-            var data = header.Concat(Encoding.UTF8.GetBytes(chat));
+            var data = header.Concat(id).Concat(txt);
             return data;
         }
         
@@ -45,25 +49,6 @@ namespace Protocol
 
             return (b << 16) | a;
         }
-
-        private static uint CreateUniqueId()
-        {
-            Message[] msgs = _chatManager.GetChatMessages();
-            uint uniqueId = 0;
-
-            foreach (var msg in msgs)
-            {
-                var beforeUniqueId = string.Empty;
-                var id = msg.Id;
-                var time = msg.Time;
-
-                beforeUniqueId += id;
-                beforeUniqueId += time;
-
-                uniqueId = CreateHash(beforeUniqueId);
-            }
-
-            return uniqueId;
-        }
+        
     }
 }
