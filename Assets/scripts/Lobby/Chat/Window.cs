@@ -82,38 +82,6 @@ namespace Lobby.Chat
             }
             GUI.EndScrollView();
         }
-
-        private static uint CreateHash(string str)
-        {
-            const int mod = 65521;
-            uint a = 1, b = 0;
-            foreach (char c in str)
-            {
-                a = (a + c) % mod;
-                b = (b + a) % mod;
-            }
-
-            return (b << 16) | a;
-        }
-
-        private uint CreateUniqueId()
-        {
-            Message[] msgs = chatManager.GetChatMessages();
-            uint uniqueId = 0;
-
-            foreach (var msg in msgs)
-            {
-                var beforeUniqueId = string.Empty;
-                var id = msg.Id;
-                var time = msg.Time;
-
-                beforeUniqueId += id;
-                beforeUniqueId += time;
-
-                uniqueId = CreateHash(beforeUniqueId);
-            }
-
-            return uniqueId;
-        }
+        
     }
 }
