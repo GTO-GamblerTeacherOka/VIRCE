@@ -39,12 +39,7 @@ namespace Protocol
         
         private static uint CreateHash(string str)
         {
-            Message[] msgs = _chatManager.GetChatMessages();
-            foreach (var msg in msgs)
-            {
-                var time = msg.Time;
-                str += time;
-            }
+            str += DateTime.Now;
 
             const int mod = 65521;
             uint a = 1, b = 0;
