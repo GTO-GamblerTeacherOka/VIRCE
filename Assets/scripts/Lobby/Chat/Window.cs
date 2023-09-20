@@ -83,10 +83,23 @@ namespace Lobby.Chat
             GUI.EndScrollView();
         }
 
-        private StringBuilder CreateUniqueId()
+        private static uint CreateHash(string str)
+        {
+            const int mod = 65521;
+            uint a = 1, b = 0;
+            foreach (char c in str)
+            {
+                a = (a + c) % mod;
+                b = (b + a) % mod;
+            }
+
+            return (b << 16) | a;
+        }
+
+        private uint CreateUniqueId()
         {
             Message[] msgs = chatManager.GetChatMessages();
-            var uniqueId = new StringBuilder();
+            uint uniqueId = 0;
 
             foreach (var msg in msgs)
             {
@@ -97,19 +110,7 @@ namespace Lobby.Chat
                 beforeUniqueId += id;
                 beforeUniqueId += time;
 
-                byte[] beforeByteArray = Encoding.UTF8.GetBytes(beforeUniqueId);
-
-                SHA1 sha1 = SHA1.Create();
-                byte[] afterByteArray = sha1.ComputeHash(beforeByteArray);
-                sha1.Clear();
-
-                StringBuilder afterUniqueId = new StringBuilder();
-                foreach (byte b in afterByteArray)
-                {
-                    afterUniqueId.Append(b.ToString("x2"));
-                }
-
-                uniqueId = afterUniqueId;
+                uniqueId = CreateHash(beforeUniqueId);
             }
 
             return uniqueId;
