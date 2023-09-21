@@ -4,16 +4,14 @@ namespace Protocol
 {
     public static class Parser 
     {
-        public enum Flag{
+        public enum Flag
+        {
             PositionData = 0,
-            AvatarDats = 1,
+            AvatarData = 1,
             RoomEntry = 2,
-            ExitRoom = 3,
-            SendReaction = 4,
-            ReceiveReaction = 5,
+            RoomExit = 3,
+            Reaction = 4,
             ChatData = 7,
-            GetRemoteEndPoint = 8,
-            ReceiveRemoteEndPoint = 9
         }
 
         private const int HeaderSize = 2;
