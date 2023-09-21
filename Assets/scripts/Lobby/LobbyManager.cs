@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
 using Networking;
 using Protocol;
 using Settings;
@@ -61,30 +59,11 @@ namespace Lobby
             Send();
         }
 
-        private void Send()
+        private static void Send()
         {
-            var sendVec = new[]
-            {
-                _currentUserGameObject.transform.position.x,
-                _currentUserGameObject.transform.position.y,
-                _currentUserGameObject.transform.position.z
-            };
-            var sendAngleVec = new[]
-            {
-                _currentUserGameObject.transform.eulerAngles.x,
-                _currentUserGameObject.transform.eulerAngles.y,
-                _currentUserGameObject.transform.eulerAngles.z
-            };
-            var vf = sendVec.Concat(sendAngleVec).ToArray();
-            var body = new byte[24];
-            for (var i = 0; i < vf.Length; i++)
-            {
-                var b = BitConverter.GetBytes(vf[i]);
-                Array.Copy(b, 0, body, i * 4, 4);
-            }
-
-            //todo:send data with header
-            UniTask.Run(() => { });
+            var data = PacketCreator.PositionPacket(_currentUserGameObject.transform.position,
+                _currentUserGameObject.transform.eulerAngles);
+            Socket.Instance.Send(data);
         }
 
         public void SetCurrentGameObject(GameObject playerGameObject)
