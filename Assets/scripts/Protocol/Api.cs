@@ -18,5 +18,12 @@ namespace Protocol
 
             Socket.Instance.Send(packetData);
         }
+
+        public static void SendUserName(string name)
+        {
+            var packetData = PacketCreator.UserNamePacket(name);
+            
+            Socket.Instance.Send(packetData);
+        }
     }
 }
