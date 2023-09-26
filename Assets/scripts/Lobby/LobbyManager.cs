@@ -4,6 +4,7 @@ using Networking;
 using Protocol;
 using Settings;
 using UnityEngine;
+using VRoid;
 
 namespace Lobby
 {
@@ -12,21 +13,21 @@ namespace Lobby
     /// </summary>
     public class LobbyManager : MonoBehaviour
     {
-        private static Dictionary<string, GameObject> _userObjects;
-        private static GameObject _currentUserGameObject;
+        private static Dictionary<byte, GameObject> UserObjects => ModelManager.Models;
+        private static GameObject CurrentUserGameObject => UserObjects[GameSetting.UserId];
 
         private void Start()
         {
-            _userObjects = new Dictionary<string, GameObject>();
             var data = PacketCreator.EntryPacket(PacketCreator.EntryType.Lobby, GameSetting.ModelPublishId);
             Socket.Instance.Send(data);
         }
 
         private void Update()
         {
-            foreach (var keyValuePair in _userObjects)
+            foreach (var keyValuePair in UserObjects)
             {
                 var key = keyValuePair.Key;
+                if (key == GameSetting.UserId) continue;
                 var obj = keyValuePair.Value;
 
                 //TODO:get data from DataBuf
@@ -56,19 +57,15 @@ namespace Lobby
 
         private void FixedUpdate()
         {
+            if (CurrentUserGameObject is null) return;
             Send();
         }
 
         private static void Send()
         {
-            var data = PacketCreator.PositionPacket(_currentUserGameObject.transform.position,
-                _currentUserGameObject.transform.eulerAngles);
+            var data = PacketCreator.PositionPacket(CurrentUserGameObject.transform.position,
+                CurrentUserGameObject.transform.eulerAngles);
             Socket.Instance.Send(data);
-        }
-
-        public void SetCurrentGameObject(GameObject playerGameObject)
-        {
-            _currentUserGameObject = playerGameObject;
         }
     }
 }

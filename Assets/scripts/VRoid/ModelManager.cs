@@ -17,8 +17,8 @@ namespace VRoid
     /// </summary>
     public class ModelManager : MonoBehaviour
     {
-        private static readonly Dictionary<byte, GameObject> Models = new();
-        private static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly Dictionary<byte, GameObject> Models = new();
+        public static readonly Dictionary<byte, string> ModelIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
@@ -59,6 +59,8 @@ namespace VRoid
                                                      | RigidbodyConstraints.FreezePositionX
                                                      | RigidbodyConstraints.FreezePositionZ;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+                    Models[GameSetting.UserId] = vrm;
                 }, progress => { Debug.Log(progress); }, _ => { });
             }, _ => { });
             UniTask.RunOnThreadPool(() =>
