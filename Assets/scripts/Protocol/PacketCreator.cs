@@ -49,5 +49,12 @@ namespace Protocol
             var data = header.Concat(body);
             return data;
         }
+        
+        public static byte[] DisplayNamePacket(string name)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.DisplayNameData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(name));
+            return data;
+        }
     }
 }
