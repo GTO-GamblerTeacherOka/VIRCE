@@ -25,5 +25,12 @@ namespace Protocol
             
             Socket.Instance.Send(packetData);
         }
+        
+        public static void SendPosition(in UnityEngine.Vector3 position, in UnityEngine.Vector3 rotation)
+        {
+            var packetData = PacketCreator.PositionPacket(position, rotation);
+
+            Socket.Instance.Send(packetData);
+        }
     }
 }
