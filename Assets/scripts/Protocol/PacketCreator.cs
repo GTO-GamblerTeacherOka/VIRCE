@@ -56,5 +56,12 @@ namespace Protocol
             var data = header.Concat(Encoding.UTF8.GetBytes(name));
             return data;
         }
+        
+        public static byte[] ExitPacket()
+        {
+            var header = Parser.CreateHeader(Parser.Flag.RoomExit, GameSetting.UserId, GameSetting.RoomId);
+            var data = header;
+            return data;
+        }
     }
 }
