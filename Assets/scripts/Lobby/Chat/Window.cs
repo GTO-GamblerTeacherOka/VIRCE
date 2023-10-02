@@ -1,5 +1,8 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using Lobby.Chat.DataBase;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -69,5 +72,6 @@ namespace Lobby.Chat
             for (var i = 0; i < messages.Length; i++) GUI.Label(new Rect(0, i * 20, 380, 20), messages[i].ToString());
             GUI.EndScrollView();
         }
+        
     }
 }
