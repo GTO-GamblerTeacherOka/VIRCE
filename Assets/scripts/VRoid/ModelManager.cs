@@ -19,6 +19,7 @@ namespace VRoid
     {
         public static readonly Dictionary<byte, GameObject> Models = new();
         public static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly List<byte> DeleteUserIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
@@ -74,6 +75,14 @@ namespace VRoid
         {
             var noLoadedKeys = ModelIds.Keys.ToArray().Where(k => !Models.Keys.Contains(k));
             foreach (var key in noLoadedKeys) LoadOtherPlayerModel(key, ModelIds[key]);
+            foreach (var key in DeleteUserIds)
+            {
+                Destroy(Models[key]);
+                Models.Remove(key);
+                ModelIds.Remove(key);
+            }
+
+            DeleteUserIds.Clear();
         }
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
