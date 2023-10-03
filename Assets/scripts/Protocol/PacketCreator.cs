@@ -63,5 +63,12 @@ namespace Protocol
             var data = header;
             return data;
         }
+        
+        public static byte[] AvatarDataPacket(string avatarId)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.AvatarData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(avatarId));
+            return data;
+        }
     }
 }
