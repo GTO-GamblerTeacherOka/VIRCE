@@ -64,6 +64,9 @@ namespace Networking
 
         private static async UniTask ReceiveHandler(UdpReceiveResult res)
         {
+            var data = res.Buffer;
+            var (header, body) = Parser.Split(data);
+            
             
         }
     }
