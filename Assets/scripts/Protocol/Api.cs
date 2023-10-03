@@ -37,6 +37,7 @@ namespace Protocol
         {
             var packetData = PacketCreator.AvatarDataPacket(avatarId);
             
+            Socket.Instance.Send(packetData);
         }
     }
 }
