@@ -58,7 +58,7 @@ namespace Networking
         public void Send(byte[] data)
         {
             _remoteEp = GameSetting.RemoteEndPoint;
-            _client.Send(data, data.Length, _remoteEp);
+            _client.SendAsync(data, data.Length, _remoteEp);
         }
     }
 }
