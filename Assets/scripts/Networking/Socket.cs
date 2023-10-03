@@ -66,8 +66,14 @@ namespace Networking
         {
             var data = res.Buffer;
             var (header, body) = Parser.Split(data);
-            
-            
+            var (flag, uid, rid) = Parser.AnalyzeHeader(header);
+
+            switch (flag)
+            {
+                case Parser.Flag.PositionData:
+                    
+                    
+            }
         }
     }
 }
