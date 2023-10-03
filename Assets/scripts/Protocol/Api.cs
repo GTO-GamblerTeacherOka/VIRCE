@@ -42,7 +42,7 @@ namespace Protocol
 
         public static void SendReaction(string uniqueId)
         {
-            
+            var packetData = PacketCreator.ReactionPacket(uniqueId);
         }
     }
 }
