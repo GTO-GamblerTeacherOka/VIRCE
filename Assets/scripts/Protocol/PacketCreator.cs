@@ -1,13 +1,17 @@
 using System;
 using System.Text;
+using Lobby.Chat;
 using Settings;
 using UniJSON;
 using UnityEngine;
+
 
 namespace Protocol
 {
     public static class PacketCreator
     {
+        private static ChatManager _chatManager;
+        
         public enum EntryType
         {
             Lobby = 0,
@@ -25,8 +29,11 @@ namespace Protocol
 
         public static byte[] ChatPacket(string chat)
         {
+            byte[] id = BitConverter.GetBytes(CreateHash(chat));
+            byte[] txt = Encoding.UTF8.GetBytes(chat);
+
             var header = Parser.CreateHeader(Parser.Flag.ChatData, GameSetting.UserId, GameSetting.RoomId);
-            var data = header.Concat(Encoding.UTF8.GetBytes(chat));
+            var data = header.Concat(id).Concat(txt);
             return data;
         }
 
@@ -49,7 +56,7 @@ namespace Protocol
             var data = header.Concat(body);
             return data;
         }
-        
+
         public static byte[] DisplayNamePacket(string name)
         {
             var header = Parser.CreateHeader(Parser.Flag.DisplayNameData, GameSetting.UserId, GameSetting.RoomId);
@@ -76,6 +83,21 @@ namespace Protocol
             var header = Parser.CreateHeader(Parser.Flag.Reaction, GameSetting.UserId, GameSetting.RoomId);
             var data = header.Concat(Encoding.UTF8.GetBytes(uniqueId));
             return data;
+        }
+
+        private static uint CreateHash(string str)
+        {
+            str += DateTime.Now;
+
+            const int mod = 1029495;
+            uint a = 1, b = 0;
+            foreach (char c in str)
+            {
+                a = (a + c) % mod;
+                b = (b + a) % mod;
+            }
+
+            return (b << 16) | a;
         }
     }
 }
