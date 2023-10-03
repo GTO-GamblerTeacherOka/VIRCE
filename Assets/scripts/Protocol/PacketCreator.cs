@@ -73,7 +73,7 @@ namespace Protocol
 
         public static byte[] ReactionPacket(string uniqueId)
         {
-            var header = Parser.CreateHeader(Parser.Flag.ReactionData, GameSetting.UserId, GameSetting.RoomId);
+            var header = Parser.CreateHeader(Parser.Flag.Reaction, GameSetting.UserId, GameSetting.RoomId);
             var data = header.Concat(Encoding.UTF8.GetBytes(uniqueId));
             return data;
         }

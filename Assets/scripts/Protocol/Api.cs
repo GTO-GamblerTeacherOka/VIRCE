@@ -39,5 +39,10 @@ namespace Protocol
             
             Socket.Instance.Send(packetData);
         }
+
+        public static void SendReaction(string uniqueId)
+        {
+            
+        }
     }
 }
