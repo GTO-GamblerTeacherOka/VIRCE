@@ -16,13 +16,13 @@ namespace Lobby.Chat
         private static readonly MeCabIpaDicTagger Tagger = MeCabIpaDicTagger.Create(DicDir);
         [Inject] private IChatDataBase _chatDataBase;
 
-        private ChatManager _instance;
+        public static ChatManager Instance { get; private set; }
 
         private void Start()
         {
-            if (_instance == null)
+            if (Instance == null)
             {
-                _instance = this;
+                Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -48,6 +48,11 @@ namespace Lobby.Chat
         public Message[] GetChatMessages()
         {
             return _chatDataBase.GetMessages();
+        }
+
+        public void AddChatMessage(in Message msg)
+        {
+            _chatDataBase.AddMessage(msg);
         }
     }
 }

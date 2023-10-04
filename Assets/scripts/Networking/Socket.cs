@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
-using Protocol;
 using Settings;
 
 namespace Networking
@@ -49,8 +48,7 @@ namespace Networking
                 while (_isConnected)
                 {
                     var res = await _client.ReceiveAsync();
-                    var data = res.Buffer;
-                    Buffer.Instance.InputBuf(data);
+                    await ReceiveHandler.Handle(res);
                 }
             });
         }

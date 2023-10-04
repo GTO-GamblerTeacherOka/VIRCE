@@ -24,8 +24,6 @@ namespace VRoid
             {
                 GameSetting.SetModelPublishId(license.id);
                 SceneManager.LoadScene("main");
-                GameSetting.SetRoomId(1);
-                GameSetting.SetUserId(1);
             }, _ => { });
         }
 

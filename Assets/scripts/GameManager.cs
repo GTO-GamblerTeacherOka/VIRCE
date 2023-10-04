@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Pixiv.VroidSdk;
 using Protocol;
 using UnityEngine;
@@ -9,6 +10,8 @@ using VRoid;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
+
+    public static Dictionary<byte, string> DisplayNames = new();
 
     private void Awake()
     {

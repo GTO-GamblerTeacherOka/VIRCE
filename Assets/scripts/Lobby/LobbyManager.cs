@@ -5,7 +5,7 @@ using Protocol;
 using Settings;
 using UnityEngine;
 using VRoid;
-using Buffer = Protocol.Buffer;
+using Buffer = Networking.Buffer;
 
 namespace Lobby
 {
