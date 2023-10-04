@@ -10,6 +10,7 @@ namespace Lobby
 /// </summary>
     public class AnimatorControl : MonoBehaviour
     {
+        private Vector3 _move;
 
     }
 }
