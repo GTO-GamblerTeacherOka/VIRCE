@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Networking;
 using Settings;
 using UnityEngine;
@@ -6,53 +7,53 @@ namespace Protocol
 {
     public static class Api
     {
-        public static void RoomEntry(PacketCreator.EntryType type)
+        public static async UniTask RoomEntry(PacketCreator.EntryType type)
         {
             var packetData = PacketCreator.EntryPacket(type, GameSetting.ModelPublishId);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
 
-        public static void SendChat(string chat)
+        public static async UniTask SendChat(string chat)
         {
             var packetData = PacketCreator.ChatPacket(chat);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
 
-        public static void SendDisplayName(string name)
+        public static async UniTask SendDisplayName(string name)
         {
             var packetData = PacketCreator.DisplayNamePacket(name);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
 
-        public static void SendPosition(in Vector3 position, in Vector3 rotation)
+        public static async UniTask SendPosition(Vector3 position, Vector3 rotation)
         {
             var packetData = PacketCreator.PositionPacket(position, rotation);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
 
         public static void SendExit()
         {
             var packetData = PacketCreator.ExitPacket();
 
-            Socket.Instance.Send(packetData);
+            Socket.Instance.SendSync(packetData);
         }
 
-        public static void SendAvatarData(string avatarId)
+        public static async UniTask SendAvatarData(string avatarId)
         {
             var packetData = PacketCreator.AvatarDataPacket(avatarId);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
 
-        public static void SendReaction(string uniqueId)
+        public static async UniTask SendReaction(string uniqueId)
         {
             var packetData = PacketCreator.ReactionPacket(uniqueId);
 
-            Socket.Instance.Send(packetData);
+            await Socket.Instance.Send(packetData);
         }
     }
 }
