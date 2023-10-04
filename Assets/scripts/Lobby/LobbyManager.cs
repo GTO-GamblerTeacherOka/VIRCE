@@ -63,6 +63,7 @@ namespace Lobby
         private void FixedUpdate()
         {
             if (CurrentUserGameObject is null) return;
+            if (GameSetting.UserId == 0) return;
             Send();
         }
 
