@@ -91,7 +91,7 @@ namespace Protocol
 
             const int mod = 1029495;
             uint a = 1, b = 0;
-            foreach (char c in str)
+            foreach (var c in str)
             {
                 a = (a + c) % mod;
                 b = (b + a) % mod;
