@@ -5,6 +5,7 @@ using Protocol;
 using Settings;
 using UnityEngine;
 using VRoid;
+using Buffer = Protocol.Buffer;
 
 namespace Lobby
 {
@@ -24,34 +25,38 @@ namespace Lobby
 
         private void Update()
         {
-            foreach (var keyValuePair in UserObjects)
+            var buf = Buffer.Instance.GetBuf();
+            foreach (var (key, obj) in UserObjects)
             {
-                var key = keyValuePair.Key;
                 if (key == GameSetting.UserId) continue;
-                var obj = keyValuePair.Value;
 
-                //TODO:get data from DataBuf
-                var body = new byte[24];
+                try
+                {
+                    var body = buf[key];
+                    var x = body[..4];
+                    var y = body[4..8];
+                    var z = body[8..12];
+                    var vec = new Vector3(
+                        BitConverter.ToSingle(x),
+                        BitConverter.ToSingle(y),
+                        BitConverter.ToSingle(z));
 
-                var x = body[..4];
-                var y = body[4..8];
-                var z = body[8..12];
-                var vec = new Vector3(
-                    BitConverter.ToSingle(x),
-                    BitConverter.ToSingle(y),
-                    BitConverter.ToSingle(z));
+                    var angleX = body[12..16];
+                    var angleY = body[16..20];
+                    var angleZ = body[20..24];
 
-                var angleX = body[12..16];
-                var angleY = body[16..20];
-                var angleZ = body[20..24];
+                    var angleVec = new Vector3(
+                        BitConverter.ToSingle(angleX),
+                        BitConverter.ToSingle(angleY),
+                        BitConverter.ToSingle(angleZ));
 
-                var angleVec = new Vector3(
-                    BitConverter.ToSingle(angleX),
-                    BitConverter.ToSingle(angleY),
-                    BitConverter.ToSingle(angleZ));
-
-                obj.transform.position = vec;
-                obj.transform.eulerAngles = angleVec;
+                    obj.transform.position = vec;
+                    obj.transform.eulerAngles = angleVec;
+                }
+                catch
+                {
+                    // ignored
+                }
             }
         }
 
@@ -63,8 +68,8 @@ namespace Lobby
 
         private static void Send()
         {
-            Api.SendPosition(_currentUserGameObject.transform.position,
-                _currentUserGameObject.transform.eulerAngles);
+            Api.SendPosition(CurrentUserGameObject.transform.position,
+                CurrentUserGameObject.transform.eulerAngles);
         }
     }
 }
