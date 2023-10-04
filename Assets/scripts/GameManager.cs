@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Networking;
 using Pixiv.VroidSdk;
 using Protocol;
 using UnityEngine;
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
             ModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
             MultiplayModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
             Application.targetFrameRate = 60;
+            Socket.Instance.StartRecv().Forget();
         }
         else
         {
