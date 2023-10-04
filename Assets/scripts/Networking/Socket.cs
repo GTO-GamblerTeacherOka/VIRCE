@@ -71,6 +71,7 @@ namespace Networking
             switch (flag)
             {
                 case Parser.Flag.PositionData:
+                    break; 
                     
                     
             }
