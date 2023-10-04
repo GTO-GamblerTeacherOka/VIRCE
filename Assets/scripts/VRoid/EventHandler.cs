@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Protocol;
 using Settings;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,7 +21,14 @@ namespace VRoid
             DeleteAllChildren();
             go.transform.parent = transform;
             GameSetting.SetModelId(modelId);
-            SceneManager.LoadScene("main");
+            Auth.MultiplayApi.PostDownloadLicenses(modelId, license =>
+            {
+                GameSetting.SetModelPublishId(license.id);
+                Api.RoomEntry(PacketCreator.EntryType.Lobby);
+                SceneManager.LoadScene("main");
+                GameSetting.SetRoomId(1);
+                GameSetting.SetUserId(1);
+            }, _ => { });
         }
 
         public override void OnLangChanged(Translator.Locales locale)
