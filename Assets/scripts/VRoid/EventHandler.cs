@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Protocol;
 using Settings;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,7 +23,6 @@ namespace VRoid
             Auth.MultiplayApi.PostDownloadLicenses(modelId, license =>
             {
                 GameSetting.SetModelPublishId(license.id);
-                Api.RoomEntry(PacketCreator.EntryType.Lobby);
                 SceneManager.LoadScene("main");
                 GameSetting.SetRoomId(1);
                 GameSetting.SetUserId(1);
