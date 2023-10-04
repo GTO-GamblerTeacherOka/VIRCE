@@ -5,18 +5,17 @@ using Settings;
 using UniJSON;
 using UnityEngine;
 
-
 namespace Protocol
 {
     public static class PacketCreator
     {
-        private static ChatManager _chatManager;
-        
         public enum EntryType
         {
             Lobby = 0,
             MiniGame = 1
         }
+
+        private static ChatManager _chatManager;
 
         public static byte[] EntryPacket(EntryType type, string modelID)
         {
@@ -29,8 +28,8 @@ namespace Protocol
 
         public static byte[] ChatPacket(string chat)
         {
-            byte[] id = BitConverter.GetBytes(CreateHash(chat));
-            byte[] txt = Encoding.UTF8.GetBytes(chat);
+            var id = BitConverter.GetBytes(CreateHash(chat));
+            var txt = Encoding.UTF8.GetBytes(chat);
 
             var header = Parser.CreateHeader(Parser.Flag.ChatData, GameSetting.UserId, GameSetting.RoomId);
             var data = header.Concat(id).Concat(txt);
@@ -63,14 +62,13 @@ namespace Protocol
             var data = header.Concat(Encoding.UTF8.GetBytes(name));
             return data;
         }
-        
+
         public static byte[] ExitPacket()
         {
-            var header = Parser.CreateHeader(Parser.Flag.RoomExit, GameSetting.UserId, GameSetting.RoomId);
-            var data = header;
+            var data = Parser.CreateHeader(Parser.Flag.RoomExit, GameSetting.UserId, GameSetting.RoomId);
             return data;
         }
-        
+
         public static byte[] AvatarDataPacket(string avatarId)
         {
             var header = Parser.CreateHeader(Parser.Flag.AvatarData, GameSetting.UserId, GameSetting.RoomId);

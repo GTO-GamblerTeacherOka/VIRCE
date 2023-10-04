@@ -1,9 +1,10 @@
 using Pixiv.VroidSdk;
+using Protocol;
 using UnityEngine;
 using VRoid;
 
 /// <summary>
-/// Class for managing game
+///     Class for managing game
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        Api.SendExit();
+
         Auth.Logout();
     }
 }
