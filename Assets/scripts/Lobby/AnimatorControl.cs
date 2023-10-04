@@ -13,7 +13,7 @@ namespace Lobby
     public class AnimatorControl : MonoBehaviour
     {
         private static Dictionary<string, GameObject> _userObjects;
-        private static Vector3 LastPos = new();
+        private static Vector3 _lastPos = new();
         public Animator animator;
         private static readonly int Speed = Animator.StringToHash("speed");
         private bool _isAnimating;
@@ -26,16 +26,23 @@ namespace Lobby
                 var obj = keyValuePair.Value;
                 
                 var currentPos = obj.transform.position;
-                if (currentPos != LastPos)
+                if (currentPos != _lastPos)
                 {
-                    animator.SetFloat(Speed, 1.0f);
-                    _isAnimating = true;
+                    if (_isAnimating == false)
+                    {
+                        animator.SetFloat(Speed, 1.0f);
+                        _isAnimating = true;
+                    }
                 }
                 else
                 {
-                    animator.SetFloat(Speed, 0);
-                    _isAnimating = false;
+                    if (_isAnimating == true)
+                    {
+                        animator.SetFloat(Speed, 0);
+                        _isAnimating = false;
+                    }
                 }
+                _lastPos = currentPos;
             }
         }
     }
