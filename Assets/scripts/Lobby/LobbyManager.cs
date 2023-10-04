@@ -63,9 +63,8 @@ namespace Lobby
 
         private static void Send()
         {
-            var data = PacketCreator.PositionPacket(CurrentUserGameObject.transform.position,
-                CurrentUserGameObject.transform.eulerAngles);
-            Socket.Instance.Send(data);
+            Api.SendPosition(_currentUserGameObject.transform.position,
+                _currentUserGameObject.transform.eulerAngles);
         }
     }
 }

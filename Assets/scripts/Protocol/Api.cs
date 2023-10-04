@@ -18,5 +18,33 @@ namespace Protocol
 
             Socket.Instance.Send(packetData);
         }
+
+        public static void SendDisplayName(string name)
+        {
+            var packetData = PacketCreator.DisplayNamePacket(name);
+            
+            Socket.Instance.Send(packetData);
+        }
+
+        public static void SendPosition(in UnityEngine.Vector3 position, in UnityEngine.Vector3 rotation)
+        {
+            var packetData = PacketCreator.PositionPacket(position, rotation);
+
+            Socket.Instance.Send(packetData);
+        }
+
+        public static void SendAvatarData(string avatarId)
+        {
+            var packetData = PacketCreator.AvatarDataPacket(avatarId);
+            
+            Socket.Instance.Send(packetData);
+        }
+
+        public static void SendReaction(string uniqueId)
+        {
+            var packetData = PacketCreator.ReactionPacket(uniqueId);
+            
+            Socket.Instance.Send(packetData);
+        }
     }
 }

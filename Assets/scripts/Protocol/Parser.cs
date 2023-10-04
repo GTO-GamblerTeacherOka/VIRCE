@@ -12,6 +12,7 @@ namespace Protocol
             RoomExit = 3,
             Reaction = 4,
             ChatData = 7,
+            DisplayNameData = 8,
         }
 
         private const int HeaderSize = 2;

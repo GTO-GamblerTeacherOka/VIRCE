@@ -56,7 +56,35 @@ namespace Protocol
             var data = header.Concat(body);
             return data;
         }
+
+        public static byte[] DisplayNamePacket(string name)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.DisplayNameData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(name));
+            return data;
+        }
         
+        public static byte[] ExitPacket()
+        {
+            var header = Parser.CreateHeader(Parser.Flag.RoomExit, GameSetting.UserId, GameSetting.RoomId);
+            var data = header;
+            return data;
+        }
+        
+        public static byte[] AvatarDataPacket(string avatarId)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.AvatarData, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(avatarId));
+            return data;
+        }
+
+        public static byte[] ReactionPacket(string uniqueId)
+        {
+            var header = Parser.CreateHeader(Parser.Flag.Reaction, GameSetting.UserId, GameSetting.RoomId);
+            var data = header.Concat(Encoding.UTF8.GetBytes(uniqueId));
+            return data;
+        }
+
         private static uint CreateHash(string str)
         {
             str += DateTime.Now;
