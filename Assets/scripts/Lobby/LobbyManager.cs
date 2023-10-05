@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Networking;
 using Protocol;
 using Settings;
@@ -20,7 +21,7 @@ namespace Lobby
         private void Start()
         {
             var data = PacketCreator.EntryPacket(PacketCreator.EntryType.Lobby, GameSetting.ModelPublishId);
-            Socket.Instance.Send(data);
+            Socket.Instance.Send(data).Forget();
         }
 
         private void Update()
@@ -62,9 +63,16 @@ namespace Lobby
 
         private void FixedUpdate()
         {
-            if (CurrentUserGameObject is null) return;
-            if (GameSetting.UserId == 0) return;
-            Send();
+            try
+            {
+                var pos = CurrentUserGameObject.transform.position;
+                if (GameSetting.UserId == 0) return;
+                Send();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         private static void Send()
