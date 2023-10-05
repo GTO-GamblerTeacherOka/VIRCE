@@ -26,7 +26,7 @@ namespace Protocol
         {
             var flag = (Flag)(header[0] & 0b0000_1111);
             var uid = (byte)(((header[0] & 0b1111_0000) >> 4) | ((header[1] & 0b0000_0001) << 4));
-            var rid = (byte)(header[1] & (0b1111_1110 >> 1));
+            var rid = (byte)((header[1] & 0b1111_1110) >> 1);
             return (flag, uid, rid);
         }
 
