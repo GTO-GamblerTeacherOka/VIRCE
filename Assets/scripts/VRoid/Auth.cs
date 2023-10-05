@@ -3,6 +3,7 @@ using System.Threading;
 using Pixiv.VroidSdk;
 using Pixiv.VroidSdk.Api;
 using Pixiv.VroidSdk.Browser;
+using Pixiv.VroidSdk.Networking.Drivers;
 using Pixiv.VroidSdk.Oauth;
 using Pixiv.VroidSdk.Oauth.DataModel;
 using UnityEngine;
@@ -10,44 +11,47 @@ using UnityEngine;
 namespace VRoid
 {
     /// <summary>
-    /// Class for managing VRoid authentication
+    ///     Class for managing VRoid authentication
     /// </summary>
     public static class Auth
     {
         private static IManualCodeRegistrable _browser;
         public static ISdkConfig SDKConfig;
-        private static Client _oauthClient;
+        public static Client OauthClient;
         public static DefaultApi Api;
+        public static HttpClientDriver Driver;
         public static Account UserAccount;
+        public static MultiplayApi MultiplayApi;
 
         public static void Init()
         {
             var sdkConfigJson = Resources.Load<TextAsset>("credential.json");
             var configText = sdkConfigJson.text;
             SDKConfig = OauthProvider.CreateSdkConfig(configText);
-            var driver = new Pixiv.VroidSdk.Networking.Drivers.HttpClientDriver(SynchronizationContext.Current);
-            _oauthClient = OauthProvider.CreateOauthClient(SDKConfig, driver);
-            Api = new DefaultApi(_oauthClient);
-            _browser = BrowserProvider.Create(_oauthClient, SDKConfig);
+            Driver = new HttpClientDriver(SynchronizationContext.Current);
+            OauthClient = OauthProvider.CreateOauthClient(SDKConfig, Driver);
+            Api = new DefaultApi(OauthClient);
+            _browser = BrowserProvider.Create(OauthClient, SDKConfig);
+            MultiplayApi = new MultiplayApi(OauthClient);
         }
 
         public static void Login(Action callBack = null)
         {
-            _oauthClient.Login(_browser, account =>
+            OauthClient.Login(_browser, account =>
             {
                 UserAccount = account;
                 callBack?.Invoke();
-            }, (_) => { });
+            }, _ => { });
         }
 
         public static void OnRegisterCode(string code)
         {
             _browser.OnRegisterCode(code);
         }
-        
+
         public static void Logout()
         {
-            _oauthClient.ReleaseAuthorizedAccount();
+            OauthClient.ReleaseAuthorizedAccount();
         }
     }
 }
