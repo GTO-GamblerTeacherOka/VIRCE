@@ -1,5 +1,4 @@
 using System.Net;
-using VRoid;
 
 namespace Settings
 {
@@ -12,9 +11,9 @@ namespace Settings
         }
 
         public static IPEndPoint RemoteEndPoint { get; private set; }
-        public static string UserName { get; private set; }
-        public static string ModelId { get; private set; }
-        public static string ModelPublishId { get; private set; }
+        public static string UserName { get; private set; } = string.Empty;
+        public static string ModelId { get; private set; } = string.Empty;
+        public static string ModelPublishId { get; private set; } = string.Empty;
         public static byte RoomId { get; private set; }
         public static byte UserId { get; private set; }
 
@@ -31,7 +30,11 @@ namespace Settings
         public static void SetModelId(in string modelId)
         {
             ModelId = modelId;
-            Auth.MultiplayApi.PostDownloadLicenses(modelId, license => ModelPublishId = license.id, _ => { });
+        }
+
+        public static void SetModelPublishId(in string modelPublishId)
+        {
+            ModelPublishId = modelPublishId;
         }
 
         public static void SetRoomId(in byte roomId)
