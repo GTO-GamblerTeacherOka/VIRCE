@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Protocol;
 
 namespace Lobby
 { 
@@ -9,7 +10,10 @@ namespace Lobby
     /// </summary>
     public class SettingDisplayName : MonoBehaviour
     {
-        
-
+        public void SendDisplayName(in DisplayName displayName)
+        {
+            var newDisplayName = string.Empty;
+            Api.SendDisplayName(newDisplayName);
+        }
     }
 }
