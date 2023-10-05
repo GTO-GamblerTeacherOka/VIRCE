@@ -10,5 +10,6 @@ namespace Lobby
     public class SettingDisplayName : MonoBehaviour
     {
         public readonly string UserId;
+        public readonly string DisplayName;
     }
 }
