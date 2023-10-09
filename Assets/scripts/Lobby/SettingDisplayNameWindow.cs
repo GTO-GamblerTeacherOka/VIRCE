@@ -16,9 +16,10 @@ namespace Lobby
         
         private Vector2 _screenSize = new(0, 0);
         private Rect _windowRect = new(0, 0, 400, 400);
-        void Update()
-        {
 
+        private void DrawWindow(int windowID)
+        {
+            
         }
     }
 }
