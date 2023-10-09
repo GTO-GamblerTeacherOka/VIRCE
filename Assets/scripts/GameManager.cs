@@ -1,13 +1,19 @@
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Networking;
 using Pixiv.VroidSdk;
+using Protocol;
 using UnityEngine;
 using VRoid;
 
 /// <summary>
-/// Class for managing game
+///     Class for managing game
 /// </summary>
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
+
+    public static Dictionary<byte, string> DisplayNames = new();
 
     private void Awake()
     {
@@ -19,6 +25,7 @@ public class GameManager : MonoBehaviour
             ModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
             MultiplayModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
             Application.targetFrameRate = 60;
+            Socket.Instance.StartRecv().Forget();
         }
         else
         {
@@ -28,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        Api.SendExit();
+
         Auth.Logout();
     }
 }

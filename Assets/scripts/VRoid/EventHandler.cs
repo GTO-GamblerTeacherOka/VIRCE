@@ -20,7 +20,11 @@ namespace VRoid
             DeleteAllChildren();
             go.transform.parent = transform;
             GameSetting.SetModelId(modelId);
-            SceneManager.LoadScene("main");
+            Auth.MultiplayApi.PostDownloadLicenses(modelId, license =>
+            {
+                GameSetting.SetModelPublishId(license.id);
+                SceneManager.LoadScene("main");
+            }, _ => { });
         }
 
         public override void OnLangChanged(Translator.Locales locale)

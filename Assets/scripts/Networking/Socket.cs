@@ -2,7 +2,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
-using Protocol;
 using Settings;
 
 namespace Networking
@@ -43,23 +42,25 @@ namespace Networking
             _client = null;
         }
 
-        public void StartRecv()
+        public async UniTask StartRecv()
         {
-            UniTask.Void(async () =>
+            while (_isConnected)
             {
-                while (_isConnected)
-                {
-                    var res = await _client.ReceiveAsync();
-                    var data = res.Buffer;
-                    Buffer.Instance.InputBuf(data);
-                }
-            });
+                var res = await _client.ReceiveAsync();
+                await ReceiveHandler.Handle(res);
+            }
         }
 
-        public void Send(byte[] data)
+        public async UniTask Send(byte[] data)
         {
             _remoteEp = GameSetting.RemoteEndPoint;
-            _client.SendAsync(data, data.Length, _remoteEp);
+            await _client.SendAsync(data, data.Length, _remoteEp);
+        }
+
+        public void SendSync(byte[] data)
+        {
+            _remoteEp = GameSetting.RemoteEndPoint;
+            _client.Send(data, data.Length, _remoteEp);
         }
 
         private static async UniTask ReceiveHandler(UdpReceiveResult res)
