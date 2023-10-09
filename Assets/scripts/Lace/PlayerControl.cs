@@ -35,7 +35,6 @@ namespace Lace
            {
                animator.SetFloat(Speed, 0);
            }
-
            
            transform.position += _move = move;
            
