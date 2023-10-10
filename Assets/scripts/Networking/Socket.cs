@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
@@ -61,21 +60,6 @@ namespace Networking
         {
             _remoteEp = GameSetting.RemoteEndPoint;
             _client.Send(data, data.Length, _remoteEp);
-        }
-
-        private static async UniTask ReceiveHandler(UdpReceiveResult res)
-        {
-            var data = res.Buffer;
-            var (header, body) = Parser.Split(data);
-            var (flag, uid, rid) = Parser.AnalyzeHeader(header);
-
-            switch (flag)
-            {
-                case Parser.Flag.PositionData:
-                    break; 
-                    
-                    
-            }
         }
     }
 }
