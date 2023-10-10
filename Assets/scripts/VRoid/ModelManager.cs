@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using Lobby;
 using Pixiv.VroidSdk;
 using Settings;
@@ -17,8 +16,10 @@ namespace VRoid
     /// </summary>
     public class ModelManager : MonoBehaviour
     {
-        private static readonly Dictionary<byte, GameObject> Models = new();
-        private static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly Dictionary<byte, GameObject> Models = new();
+        public static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly List<byte> DeleteUserIds = new();
+        public static readonly Dictionary<byte, string> LoadModelIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
@@ -59,19 +60,24 @@ namespace VRoid
                                                      | RigidbodyConstraints.FreezePositionX
                                                      | RigidbodyConstraints.FreezePositionZ;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+                    Models[GameSetting.UserId] = vrm;
                 }, progress => { Debug.Log(progress); }, _ => { });
             }, _ => { });
-            UniTask.RunOnThreadPool(() =>
-            {
-                var license = GameSetting.ModelPublishId;
-                // TODO: send model license to server
-            }).Forget();
         }
 
         private void Update()
         {
             var noLoadedKeys = ModelIds.Keys.ToArray().Where(k => !Models.Keys.Contains(k));
             foreach (var key in noLoadedKeys) LoadOtherPlayerModel(key, ModelIds[key]);
+            foreach (var key in DeleteUserIds)
+            {
+                Destroy(Models[key]);
+                Models.Remove(key);
+                ModelIds.Remove(key);
+            }
+
+            DeleteUserIds.Clear();
         }
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
@@ -87,13 +93,9 @@ namespace VRoid
                 var animator = vrm.GetComponent<Animator>();
                 animator.runtimeAnimatorController = _animatorController;
 
-                vcam.transform.SetParent(vrm.transform);
-                vcam.transform.localPosition = new Vector3(0, 1f, -2);
-                vcam.transform.localEulerAngles = new Vector3(0, 0, 0);
-
                 var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
-                var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y -
-                             vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
+                var height = animator.GetBoneTransform(HumanBodyBones.Head).position.y -
+                             animator.GetBoneTransform(HumanBodyBones.Hips).position.y;
                 colliderComponent.height = height;
                 colliderComponent.radius = height / 8;
                 colliderComponent.center = new Vector3(0, height / 2, 0);
