@@ -36,7 +36,5 @@ public class GameManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         Api.SendExit();
-
-        Auth.Logout();
     }
 }
