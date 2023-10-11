@@ -46,8 +46,7 @@ namespace VRoid
                     control.animator = animator;
 
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
-                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y -
-                                 vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
+                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y;
                     colliderComponent.height = height;
                     colliderComponent.radius = height / 8;
                     colliderComponent.center = new Vector3(0, height / 2, 0);
