@@ -1,32 +1,28 @@
-using System;
 using System.Net;
 using System.Net.Sockets;
 using Cysharp.Threading.Tasks;
-using Buffer = Protocol.Buffer;
+using Settings;
 
 namespace Networking
 {
     public class Socket
     {
         private static Socket _instance;
-
-        public static Socket Instance
-        {
-            get
-            {
-                return _instance ??= new Socket();
-            }
-        }
-
         private UdpClient _client;
-        private IPEndPoint _remoteEp;
-        private IPEndPoint _localEp;
         private bool _isConnected;
-    
+        private IPEndPoint _localEp;
+        private IPEndPoint _remoteEp;
+
         private Socket()
         {
             _client = new UdpClient(0);
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
+            _isConnected = true;
+        }
+
+        public static Socket Instance
+        {
+            get { return _instance ??= new Socket(); }
         }
 
         public void Open()
@@ -34,8 +30,9 @@ namespace Networking
             if (_isConnected is not false) return;
             _client = new UdpClient(0);
             _localEp = (IPEndPoint)_client.Client.LocalEndPoint;
+            _isConnected = true;
         }
-    
+
         public async UniTask Close()
         {
             _isConnected = false;
@@ -44,22 +41,24 @@ namespace Networking
             _client = null;
         }
 
-        public void StartRecv()
+        public async UniTask StartRecv()
         {
-            UniTask.Void(async() =>
+            while (_isConnected)
             {
-                while (_isConnected)
-                {
-                    var res = await _client.ReceiveAsync();
-                    var data = res.Buffer;
-                    Buffer.Instance.InputBuf(data);
-                }
-            });
+                var res = await _client.ReceiveAsync();
+                await ReceiveHandler.Handle(res);
+            }
         }
 
-        public void Send(byte[] data)
+        public async UniTask Send(byte[] data)
         {
-            _remoteEp = Settings.GameSetting.RemoteEndPoint;
+            _remoteEp = GameSetting.RemoteEndPoint;
+            await _client.SendAsync(data, data.Length, _remoteEp);
+        }
+
+        public void SendSync(byte[] data)
+        {
+            _remoteEp = GameSetting.RemoteEndPoint;
             _client.Send(data, data.Length, _remoteEp);
         }
     }

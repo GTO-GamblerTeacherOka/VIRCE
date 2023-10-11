@@ -73,8 +73,19 @@ crashlytics-build.properties
 
 .idea/
 
-Assets/VRoidSDK
-Assets/VRoidSDK.meta
+Assets/VRoidSDK/Android
+Assets/VRoidSDK/Android.meta
+Assets/VRoidSDK/Editor
+Assets/VRoidSDK/Editor.meta
+Assets/VRoidSDK/Bin
+Assets/VRoidSDK/Bin.meta
+Assets/VRoidSDK/Extensions
+Assets/VRoidSDK/Extensions.meta
+Assets/VRoidSDK/Plugins
+Assets/VRoidSDK/Plugins.meta
+Assets/VRoidSDK/Examples/ArtworkExample
+Assets/VRoidSDK/Examples/ArtworkExample.meta
+
 Assets/Sci-Fi UI
 Assets/Sci-Fi UI.meta
 Assets/Resources/credential.json.bytes

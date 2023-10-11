@@ -4,39 +4,45 @@ namespace Settings
 {
     public static class GameSetting
     {
-        public static IPEndPoint RemoteEndPoint { get; private set; }
-        public static string UserName { get; private set; }
-        public static string ModelId { get; private set; }
-        public static int RoomId { get; private set; }
-        public static int UserId { get; private set; }
-
         static GameSetting()
         {
             var ip = IPAddress.Parse("127.0.0.1");
             RemoteEndPoint = new IPEndPoint(ip, 5000);
         }
-        
-        public static void SetRemoteEndPoint(IPEndPoint endPoint)
+
+        public static IPEndPoint RemoteEndPoint { get; private set; }
+        public static string UserName { get; private set; } = string.Empty;
+        public static string ModelId { get; private set; } = string.Empty;
+        public static string ModelPublishId { get; private set; } = string.Empty;
+        public static byte RoomId { get; private set; }
+        public static byte UserId { get; private set; }
+
+        public static void SetRemoteEndPoint(in IPEndPoint endPoint)
         {
             RemoteEndPoint = endPoint;
         }
-        
-        public static void SetUserName(string userName)
+
+        public static void SetUserName(in string userName)
         {
             UserName = userName;
         }
-        
-        public static void SetModelId(string modelId)
+
+        public static void SetModelId(in string modelId)
         {
             ModelId = modelId;
         }
-        
-        public static void SetRoomId(int roomId)
+
+        public static void SetModelPublishId(in string modelPublishId)
+        {
+            ModelPublishId = modelPublishId;
+        }
+
+        public static void SetRoomId(in byte roomId)
         {
             RoomId = roomId;
         }
-        
-        public static void SetUserId(int userId)
+
+        public static void SetUserId(in byte userId)
         {
             UserId = userId;
         }
