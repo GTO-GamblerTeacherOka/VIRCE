@@ -17,9 +17,8 @@ namespace VRoid
     public class ModelManager : MonoBehaviour
     {
         public static readonly Dictionary<byte, GameObject> Models = new();
-        public static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly Queue<(byte userId, string modelId)> LoadModelQueue = new();
         public static readonly List<byte> DeleteUserIds = new();
-        public static readonly Dictionary<byte, string> LoadModelIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
@@ -66,15 +65,20 @@ namespace VRoid
             }, _ => { });
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            var noLoadedKeys = ModelIds.Keys.ToArray().Where(k => !Models.Keys.Contains(k));
-            foreach (var key in noLoadedKeys) LoadOtherPlayerModel(key, ModelIds[key]);
-            foreach (var key in DeleteUserIds)
+            while (LoadModelQueue.Count > 0)
             {
-                Destroy(Models[key]);
-                Models.Remove(key);
-                ModelIds.Remove(key);
+                var (userId, modelId) = LoadModelQueue.Dequeue();
+                LoadOtherPlayerModel(userId, modelId);
+            }
+
+            LoadModelQueue.Clear();
+
+            foreach (var userId in DeleteUserIds.Where(userId => Models.Keys.Contains(userId)))
+            {
+                Destroy(Models[userId]);
+                Models.Remove(userId);
             }
 
             DeleteUserIds.Clear();
@@ -84,6 +88,8 @@ namespace VRoid
         {
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
             {
+                Models[userId] = vrm;
+
                 vrm.gameObject.layer = 11;
 
                 vrm.transform.localPosition = new Vector3(0, 0, 0);
@@ -107,14 +113,7 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionX
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-                Models[userId] = vrm;
             }, _ => { }, _ => { });
-        }
-
-        public static void AddModel(byte userId, string modelId)
-        {
-            ModelIds[userId] = modelId;
         }
     }
 }
