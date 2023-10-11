@@ -54,10 +54,7 @@ namespace VRoid
                     rigitBodyComponent.useGravity = true;
                     rigitBodyComponent.mass = 60;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation
-                                                     | RigidbodyConstraints.FreezePositionX
-                                                     | RigidbodyConstraints.FreezePositionZ;
-                    rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation;
 
                     Models[GameSetting.UserId] = vrm;
                 }, progress => { Debug.Log(progress); }, _ => { });

@@ -1,4 +1,3 @@
-using System;
 using IO;
 using UnityEngine;
 using Util;
@@ -26,20 +25,27 @@ namespace Lobby
 
         [Inject] private IMoveProvider _moveProvider;
 
+        private Rigidbody _rigidbody;
+
         [Inject] private IViewPointProvider _viewPointProvider;
+
+        private void Start()
+        {
+            _rigidbody = GetComponent<Rigidbody>();
+        }
 
         private void Update()
         {
             var moveComplex = _moveProvider.GetMove();
             var rotationComplex = new Complex(transform.eulerAngles, true);
-            var move = (moveComplex * rotationComplex.Conjugate).Normalize.ToVector3 *
-                       Math.Abs(moveSpeed * Time.deltaTime);
+            var move = (moveComplex * rotationComplex.Conjugate).Normalize.ToVector3 * moveSpeed;
 
             if (move.sqrMagnitude is not 0)
                 animator.SetFloat(Speed, 1.0f);
             else
                 animator.SetFloat(Speed, 0);
-            transform.position += _move = move;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.AddForce(move, ForceMode.VelocityChange);
 
             var horizontalViewPoint = _viewPointProvider.GetHorizontalViewPoint();
             transform.RotateAround(transform.position, Vector3.up,
