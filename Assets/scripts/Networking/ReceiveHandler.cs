@@ -31,12 +31,12 @@ namespace Networking
                         }
                         else
                         {
-                            ModelManager.ModelIds.Add(userId, Encoding.UTF8.GetString(body));
+                            ModelManager.LoadModelQueue.Enqueue((userId, Encoding.UTF8.GetString(body)));
                         }
 
                         break;
                     case Parser.Flag.AvatarData:
-                        ModelManager.ModelIds.Add(userId, Encoding.UTF8.GetString(body));
+                        ModelManager.LoadModelQueue.Enqueue((userId, Encoding.UTF8.GetString(body)));
                         break;
                     case Parser.Flag.RoomExit:
                         ModelManager.DeleteUserIds.Add(userId);
