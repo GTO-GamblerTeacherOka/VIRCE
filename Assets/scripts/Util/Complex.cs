@@ -36,7 +36,7 @@ namespace Util
             buf = 0x5F3759DF - (buf >> 1);
             var y = *(float*)&buf;
 
-            y *= 1.5f - x * 0.5f * y * y;
+            y *= Math.Abs(1.5f - x * 0.5f * y * y);
             return y;
         }
         

@@ -52,7 +52,7 @@ namespace Lobby
             {
                 transform.position += _move = move;
             }
-
+            
             var horizontalViewPoint = _viewPointProvider.GetHorizontalViewPoint();
             transform.RotateAround(transform.position, Vector3.up, horizontalViewPoint * (viewPointSpeed * Time.deltaTime));
         }
