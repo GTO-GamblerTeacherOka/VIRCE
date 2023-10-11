@@ -1,30 +1,23 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Build;
 using UnityEngine;
 
 namespace Lobby
 {
-/// <summary>
-/// Class for controlling other player's Animator
-/// </summary>
+    /// <summary>
+    ///     Class for controlling other player's Animator
+    /// </summary>
     public class AnimatorControl : MonoBehaviour
     {
         private static Dictionary<string, GameObject> _userObjects;
-        private static Vector3 _lastPos = new();
-        public Animator animator;
+        private static Vector3 _lastPos;
         private static readonly int Speed = Animator.StringToHash("speed");
+        public Animator animator;
         private bool _isAnimating;
 
         private void Update()
         {
-            foreach (var keyValuePair in _userObjects)
+            foreach (var (key, obj) in _userObjects)
             {
-                var key = keyValuePair.Key;
-                var obj = keyValuePair.Value;
-                
                 var currentPos = obj.transform.position;
                 if (currentPos != _lastPos)
                 {
@@ -36,12 +29,13 @@ namespace Lobby
                 }
                 else
                 {
-                    if (_isAnimating == true)
+                    if (_isAnimating)
                     {
                         animator.SetFloat(Speed, 0);
                         _isAnimating = false;
                     }
                 }
+
                 _lastPos = currentPos;
             }
         }
