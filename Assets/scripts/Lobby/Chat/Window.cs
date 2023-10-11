@@ -1,8 +1,6 @@
 using System;
-using System.Security.Cryptography;
-using System.Text;
+using System.Text.RegularExpressions;
 using Lobby.Chat.DataBase;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -69,7 +67,25 @@ namespace Lobby.Chat
             _scrollPosition = GUI.BeginScrollView(new Rect(0, 50, 400, 300), _scrollPosition,
                 new Rect(0, 0, 380, messages.Length * 20));
             _scrollPosition = new Vector2(_scrollPosition.x, messages.Length * 20);
-            for (var i = 0; i < messages.Length; i++) GUI.Label(new Rect(0, i * 20, 380, 20), messages[i].ToString());
+            
+            foreach(var msg in messages)
+            {
+                var l = 0;
+                var count = 1;
+                var displayStr = string.Empty;
+                foreach (var c in msg.Text)
+                {
+                    var str = $"{c}";
+                    l += new Regex(@"[ -~]").IsMatch(str) ? 1 : 2;
+                    displayStr += str;
+                    if (l >= 8)
+                    {
+                        displayStr += "\n";
+                        count++;
+                    }
+                }
+                GUI.Label(new Rect(0, count * 20, 380, 20), displayStr);
+            }
             GUI.EndScrollView();
         }
         
