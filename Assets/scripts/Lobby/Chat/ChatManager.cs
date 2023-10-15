@@ -1,3 +1,4 @@
+using System.IO;
 using Lobby.Chat.DataBase;
 using NMeCab.Specialized;
 using Protocol;
@@ -12,8 +13,8 @@ namespace Lobby.Chat
     /// </summary>
     public class ChatManager : MonoBehaviour
     {
-        private const string DicDir = "Assets/Plugins/dic/ipadic";
-        private static readonly MeCabIpaDicTagger Tagger = MeCabIpaDicTagger.Create(DicDir);
+        private static string _dicDir = string.Empty;
+        private static MeCabIpaDicTagger Tagger;
         [Inject] private IChatDataBase _chatDataBase;
 
         public static ChatManager Instance { get; private set; }
@@ -23,12 +24,19 @@ namespace Lobby.Chat
             if (Instance == null)
             {
                 Instance = this;
+                Initialize();
                 DontDestroyOnLoad(gameObject);
             }
             else
             {
                 Destroy(gameObject);
             }
+        }
+
+        private void Initialize()
+        {
+            _dicDir = Path.Combine(Application.streamingAssetsPath, "dic", "ipadic");
+            Tagger = MeCabIpaDicTagger.Create(_dicDir);
         }
 
         public void SendChatMessage(in Message msg)

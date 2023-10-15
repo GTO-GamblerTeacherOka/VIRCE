@@ -46,8 +46,7 @@ namespace VRoid
                     control.animator = animator;
 
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
-                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y -
-                                 vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
+                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y;
                     colliderComponent.height = height;
                     colliderComponent.radius = height / 8;
                     colliderComponent.center = new Vector3(0, height / 2, 0);
@@ -55,10 +54,7 @@ namespace VRoid
                     rigitBodyComponent.useGravity = true;
                     rigitBodyComponent.mass = 60;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation
-                                                     | RigidbodyConstraints.FreezePositionX
-                                                     | RigidbodyConstraints.FreezePositionZ;
-                    rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation;
 
                     Models[GameSetting.UserId] = vrm;
                 }, progress => { Debug.Log(progress); }, _ => { });
