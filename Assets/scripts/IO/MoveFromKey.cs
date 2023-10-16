@@ -8,6 +8,7 @@ namespace IO
     /// </summary>
     public class MoveFromKey : IMoveProvider
     {
+        // ReSharper disable Unity.PerformanceAnalysis
         public Complex GetMove()
         {
             var moveComplex = new Complex(0, 0);
@@ -27,6 +28,7 @@ namespace IO
             {
                 moveComplex += new Complex(1, 0);
             }
+
             return moveComplex;
         }
     }

@@ -1,6 +1,7 @@
 using System.Net;
 using UnityEngine;
 using Zenject;
+using Protocol;
 
 namespace Settings
 {
@@ -92,6 +93,7 @@ namespace Settings
             if(GUI.Button(new Rect(100, 350, 200, 20), "Name Change"))
             {
                 GameSetting.SetUserName(_userName);
+                Api.SendDisplayName(_userName);
             }
         }
 
