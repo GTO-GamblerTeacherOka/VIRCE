@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using Lobby.Chat.DataBase;
 using UnityEngine;
 using Zenject;
@@ -81,12 +80,9 @@ namespace Lobby.Chat
                 {
                     var wordWidth = GetWordWidth(word);
 
-                    if (lineLength + wordWidth + (displayStr.Length  > 0 ? 1 : 0) <= lineWidth)
+                    if (lineLength + wordWidth + (displayStr.Length > 0 ? 1 : 0) <= lineWidth)
                     {
-                        if (!string.IsNullOrEmpty(displayStr))
-                        {
-                            displayStr += " ";
-                        }
+                        if (!string.IsNullOrEmpty(displayStr)) displayStr += " ";
                         displayStr += word;
                         lineLength += wordWidth + (displayStr.Length > 0 ? 1 : 0);
                     }
@@ -110,32 +106,22 @@ namespace Lobby.Chat
                 count++; // 改行時の行数増加に加えて、1行分の行数を追加
             }
 
+            GUI.EndScrollView();
+
             int GetWordWidth(string word)
             {
-                int width = 0;
+                var width = 0;
 
-                foreach (var c in word)
-                {
-                    width += GetCharWidth(c);
-                }
+                foreach (var c in word) width += GetCharWidth(c);
                 return width;
             }
 
             int GetCharWidth(char c)
             {
                 if (c >= 32 && c <= 126) // 印刷可能な ASCII 文字の範囲
-                {
                     return 1;
-                }
-                else
-                {
-                    return 2;
-                }
+                return 2;
             }
         }
     }
 }
-
-
-        
-    
