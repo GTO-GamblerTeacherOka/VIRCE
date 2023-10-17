@@ -31,12 +31,14 @@ namespace Networking
                         }
                         else
                         {
-                            ModelManager.WaitingLoadModels.Add((userId, Encoding.UTF8.GetString(body)));
+                            ModelManager.ModelIds[userId] = Encoding.UTF8.GetString(body);
+                            ModelManager.WaitingLoadUserIds.Add(userId);
                         }
 
                         break;
                     case Parser.Flag.AvatarData:
-                        ModelManager.WaitingLoadModels.Add((userId, Encoding.UTF8.GetString(body)));
+                        ModelManager.ModelIds.Add(userId, Encoding.UTF8.GetString(body));
+                        ModelManager.WaitingLoadUserIds.Add(userId);
                         break;
                     case Parser.Flag.RoomExit:
                         ModelManager.DeleteUserIds.Add(userId);

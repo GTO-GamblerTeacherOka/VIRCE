@@ -67,8 +67,15 @@ namespace Lobby
 
         private static async void Send()
         {
-            await Api.SendPosition(CurrentUserGameObject.transform.position,
-                CurrentUserGameObject.transform.eulerAngles);
+            try
+            {
+                await Api.SendPosition(CurrentUserGameObject.transform.position,
+                    CurrentUserGameObject.transform.eulerAngles);
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }
