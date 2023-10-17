@@ -17,7 +17,8 @@ namespace VRoid
     public class ModelManager : MonoBehaviour
     {
         public static readonly Dictionary<byte, GameObject> Models = new();
-        public static readonly Queue<(byte userId, string modelId)> LoadModelQueue = new();
+        public static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly List<byte> WaitingLoadUserIds = new();
         public static readonly List<byte> DeleteUserIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
@@ -63,13 +64,10 @@ namespace VRoid
 
         private void FixedUpdate()
         {
-            while (LoadModelQueue.Count > 0)
-            {
-                var (userId, modelId) = LoadModelQueue.Dequeue();
-                LoadOtherPlayerModel(userId, modelId);
-            }
+            foreach (var userId in WaitingLoadUserIds.Where(id => !Models.Keys.Contains(id)))
+                LoadOtherPlayerModel(userId, ModelIds[userId]);
 
-            LoadModelQueue.Clear();
+            WaitingLoadUserIds.Clear();
 
             foreach (var userId in DeleteUserIds.Where(userId => Models.Keys.Contains(userId)))
             {
@@ -82,6 +80,7 @@ namespace VRoid
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
         {
+            Debug.Log("Load model");
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
             {
                 Models[userId] = vrm;
@@ -109,7 +108,11 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionX
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            }, _ => { }, _ => { });
+            }, _ => { }, e =>
+            {
+                Debug.Log(e);
+                LoadOtherPlayerModel(userId, modelId);
+            });
         }
     }
 }

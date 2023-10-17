@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using Lobby.Chat.DataBase;
 using UnityEngine;
 using Zenject;
@@ -80,27 +79,62 @@ namespace Lobby.Chat
             _scrollPosition = GUI.BeginScrollView(new Rect(0, 50, 400, 300), _scrollPosition,
                 new Rect(0, 0, 380, messages.Length * 20));
             _scrollPosition = new Vector2(_scrollPosition.x, messages.Length * 20);
-            
-            foreach(var msg in messages)
+
+            var count = 1; // ループの外部で定義し、1で初期化
+            var lineWidth = 8;
+
+            foreach (var msg in messages)
             {
-                var l = 0;
-                var count = 1;
                 var displayStr = string.Empty;
-                foreach (var c in msg.Text)
+                var lineLength = 0;
+                var words = msg.Text.Split(' '); // テキストを単語ごとに分割
+
+                foreach (var word in words)
                 {
-                    var str = $"{c}";
-                    l += new Regex(@"[ -~]").IsMatch(str) ? 1 : 2;
-                    displayStr += str;
-                    if (l >= 8)
+                    var wordWidth = GetWordWidth(word);
+
+                    if (lineLength + wordWidth + (displayStr.Length > 0 ? 1 : 0) <= lineWidth)
                     {
-                        displayStr += "\n";
-                        count++;
+                        if (!string.IsNullOrEmpty(displayStr)) displayStr += " ";
+                        displayStr += word;
+                        lineLength += wordWidth + (displayStr.Length > 0 ? 1 : 0);
+                    }
+                    else
+                    {
+                        if (lineLength > 0)
+                        {
+                            count++;
+                            displayStr += word;
+                            lineLength = wordWidth;
+                        }
+                        else
+                        {
+                            displayStr += word;
+                            lineLength = wordWidth;
+                        }
                     }
                 }
+
                 GUI.Label(new Rect(0, count * 20, 380, 20), displayStr);
+                count++; // 改行時の行数増加に加えて、1行分の行数を追加
             }
+
             GUI.EndScrollView();
+
+            int GetWordWidth(string word)
+            {
+                var width = 0;
+
+                foreach (var c in word) width += GetCharWidth(c);
+                return width;
+            }
+
+            int GetCharWidth(char c)
+            {
+                if (c >= 32 && c <= 126) // 印刷可能な ASCII 文字の範囲
+                    return 1;
+                return 2;
+            }
         }
-        
     }
 }
