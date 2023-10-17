@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Networking;
 using Pixiv.VroidSdk;
@@ -13,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
-    public static Dictionary<byte, string> DisplayNames = new();
+    public static readonly string[] DisplayNames = new string[32];
 
     private void Awake()
     {
@@ -36,7 +35,5 @@ public class GameManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         Api.SendExit();
-
-        Auth.Logout();
     }
 }

@@ -18,8 +18,8 @@ namespace VRoid
     {
         public static readonly Dictionary<byte, GameObject> Models = new();
         public static readonly Dictionary<byte, string> ModelIds = new();
+        public static readonly List<byte> WaitingLoadUserIds = new();
         public static readonly List<byte> DeleteUserIds = new();
-        public static readonly Dictionary<byte, string> LoadModelIds = new();
         [SerializeField] private Camera vcam;
         [Inject] private RuntimeAnimatorController _animatorController;
         [Inject] private DiContainer _container;
@@ -47,8 +47,7 @@ namespace VRoid
                     control.animator = animator;
 
                     var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
-                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y -
-                                 vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Hips).position.y;
+                    var height = vrm.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).position.y;
                     colliderComponent.height = height;
                     colliderComponent.radius = height / 8;
                     colliderComponent.center = new Vector3(0, height / 2, 0);
@@ -56,25 +55,24 @@ namespace VRoid
                     rigitBodyComponent.useGravity = true;
                     rigitBodyComponent.mass = 60;
                     rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation
-                                                     | RigidbodyConstraints.FreezePositionX
-                                                     | RigidbodyConstraints.FreezePositionZ;
-                    rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                    rigitBodyComponent.constraints = RigidbodyConstraints.FreezeRotation;
 
                     Models[GameSetting.UserId] = vrm;
                 }, progress => { Debug.Log(progress); }, _ => { });
             }, _ => { });
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            var noLoadedKeys = ModelIds.Keys.ToArray().Where(k => !Models.Keys.Contains(k));
-            foreach (var key in noLoadedKeys) LoadOtherPlayerModel(key, ModelIds[key]);
-            foreach (var key in DeleteUserIds)
+            foreach (var userId in WaitingLoadUserIds.Where(id => !Models.Keys.Contains(id)))
+                LoadOtherPlayerModel(userId, ModelIds[userId]);
+
+            WaitingLoadUserIds.Clear();
+
+            foreach (var userId in DeleteUserIds.Where(userId => Models.Keys.Contains(userId)))
             {
-                Destroy(Models[key]);
-                Models.Remove(key);
-                ModelIds.Remove(key);
+                Destroy(Models[userId]);
+                Models.Remove(userId);
             }
 
             DeleteUserIds.Clear();
@@ -82,8 +80,11 @@ namespace VRoid
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
         {
+            Debug.Log("Load model");
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
             {
+                Models[userId] = vrm;
+
                 vrm.gameObject.layer = 11;
 
                 vrm.transform.localPosition = new Vector3(0, 0, 0);
@@ -107,14 +108,11 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionX
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-                Models[userId] = vrm;
-            }, _ => { }, _ => { });
-        }
-
-        public static void AddModel(byte userId, string modelId)
-        {
-            ModelIds[userId] = modelId;
+            }, _ => { }, e =>
+            {
+                Debug.Log(e);
+                LoadOtherPlayerModel(userId, modelId);
+            });
         }
     }
 }

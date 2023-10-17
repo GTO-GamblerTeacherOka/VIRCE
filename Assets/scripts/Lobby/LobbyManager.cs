@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Networking;
 using Protocol;
 using Settings;
 using UnityEngine;
 using VRoid;
-using Buffer = Networking.Buffer;
 
 namespace Lobby
 {
@@ -15,44 +12,51 @@ namespace Lobby
     /// </summary>
     public class LobbyManager : MonoBehaviour
     {
+        private const float TimeSpan = 0.1f;
+        private static float _lastSendTime;
+        private static Dictionary<byte, Vector3[]> _userPositions = new();
         private static Dictionary<byte, GameObject> UserObjects => ModelManager.Models;
         private static GameObject CurrentUserGameObject => UserObjects[GameSetting.UserId];
 
-        private void Start()
+        private async void Start()
         {
             var data = PacketCreator.EntryPacket(PacketCreator.EntryType.Lobby, GameSetting.ModelPublishId);
-            Socket.Instance.Send(data).Forget();
+            await Socket.Instance.Send(data);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            var buf = Buffer.Instance.GetBuf();
+            if (_lastSendTime > TimeSpan)
+            {
+                try
+                {
+                    if (GameSetting.UserId == 0) return;
+                    Send();
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                _userPositions = Buffer.Instance.GetBuf();
+
+                _lastSendTime = 0;
+            }
+            else
+            {
+                _lastSendTime += Time.deltaTime;
+            }
+
             foreach (var (key, obj) in UserObjects)
             {
                 if (key == GameSetting.UserId) continue;
 
                 try
                 {
-                    var body = buf[key];
-                    var x = body[..4];
-                    var y = body[4..8];
-                    var z = body[8..12];
-                    var vec = new Vector3(
-                        BitConverter.ToSingle(x),
-                        BitConverter.ToSingle(y),
-                        BitConverter.ToSingle(z));
-
-                    var angleX = body[12..16];
-                    var angleY = body[16..20];
-                    var angleZ = body[20..24];
-
-                    var angleVec = new Vector3(
-                        BitConverter.ToSingle(angleX),
-                        BitConverter.ToSingle(angleY),
-                        BitConverter.ToSingle(angleZ));
-
-                    obj.transform.position = vec;
-                    obj.transform.eulerAngles = angleVec;
+                    obj.transform.position =
+                        Vector3.Lerp(obj.transform.position, _userPositions[key][0], _lastSendTime / TimeSpan);
+                    obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, _userPositions[key][1],
+                        _lastSendTime / TimeSpan);
                 }
                 catch
                 {
@@ -61,24 +65,17 @@ namespace Lobby
             }
         }
 
-        private void FixedUpdate()
+        private static async void Send()
         {
             try
             {
-                var pos = CurrentUserGameObject.transform.position;
-                if (GameSetting.UserId == 0) return;
-                Send();
+                await Api.SendPosition(CurrentUserGameObject.transform.position,
+                    CurrentUserGameObject.transform.eulerAngles);
             }
             catch
             {
                 // ignored
             }
-        }
-
-        private static void Send()
-        {
-            Api.SendPosition(CurrentUserGameObject.transform.position,
-                CurrentUserGameObject.transform.eulerAngles);
         }
     }
 }

@@ -35,15 +35,9 @@ namespace Lace
            {
                animator.SetFloat(Speed, 0);
            }
-
-           if (_isColliding)
-           {
-               transform.position -= _move;
-           }
-           else
-           {
-               transform.position += _move = move;
-           }
+           
+           transform.position += _move = move;
+           
        }
    } 
 }
