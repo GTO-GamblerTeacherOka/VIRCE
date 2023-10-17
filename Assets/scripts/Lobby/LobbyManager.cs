@@ -12,8 +12,9 @@ namespace Lobby
     /// </summary>
     public class LobbyManager : MonoBehaviour
     {
+        private const float TimeSpan = 0.1f;
         private static float _lastSendTime;
-        private static Dictionary<byte, Vector3[]> UserPositions = new();
+        private static Dictionary<byte, Vector3[]> _userPositions = new();
         private static Dictionary<byte, GameObject> UserObjects => ModelManager.Models;
         private static GameObject CurrentUserGameObject => UserObjects[GameSetting.UserId];
 
@@ -25,7 +26,7 @@ namespace Lobby
 
         private void FixedUpdate()
         {
-            if (_lastSendTime > 0.05f)
+            if (_lastSendTime > TimeSpan)
             {
                 try
                 {
@@ -37,7 +38,7 @@ namespace Lobby
                     // ignored
                 }
 
-                UserPositions = Buffer.Instance.GetBuf();
+                _userPositions = Buffer.Instance.GetBuf();
 
                 _lastSendTime = 0;
             }
@@ -53,9 +54,9 @@ namespace Lobby
                 try
                 {
                     obj.transform.position =
-                        Vector3.Lerp(obj.transform.position, UserPositions[key][0], _lastSendTime / 0.1f);
-                    obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, UserPositions[key][1],
-                        _lastSendTime / 0.1f);
+                        Vector3.Lerp(obj.transform.position, _userPositions[key][0], _lastSendTime / TimeSpan);
+                    obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, _userPositions[key][1],
+                        _lastSendTime / TimeSpan);
                 }
                 catch
                 {
