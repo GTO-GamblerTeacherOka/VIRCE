@@ -26,6 +26,9 @@ namespace Lobby.Chat
         [Inject] private GUISkin _skin;
 
         private Rect _windowRect = new(0, 0, 400, 400);
+        
+        // Use for Debug
+        private string _errorMessage = string.Empty;
 
         private void Start()
         {
@@ -47,6 +50,9 @@ namespace Lobby.Chat
                 if (GUI.Button(new Rect(0, _screenSize.y - 60, 60, 60), chatButtonTexture, GUIStyle.none))
                     _showWindow = true;
             }
+            // debug
+            GUI.Label(new Rect(0, 0, 400, 20), _errorMessage);
+            // end debug
         }
 
         private void DrawWindow(int windowID)
@@ -57,9 +63,16 @@ namespace Lobby.Chat
             // ReSharper disable once InvertIf
             if (GUI.Button(new Rect(360, 340, 40, 40), sendButtonTexture, GUIStyle.none))
             {
-                if (_chatMessage.Length > 0)
-                    chatManager.SendChatMessage(new Message("Demo", "DemoUser", _chatMessage, DateTime.Now));
-                _chatMessage = string.Empty;
+                try
+                {
+                    if (_chatMessage.Length > 0)
+                        chatManager.SendChatMessage(new Message("Demo", "DemoUser", _chatMessage, DateTime.Now));
+                    _chatMessage = string.Empty;
+                }
+                catch (Exception e)
+                {
+                    _errorMessage = e.Message;
+                }
             }
 
             var messages = chatManager.GetChatMessages();
