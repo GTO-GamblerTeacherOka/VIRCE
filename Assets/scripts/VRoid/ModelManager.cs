@@ -80,7 +80,6 @@ namespace VRoid
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
         {
-            Debug.Log("Load model");
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
             {
                 Models[userId] = vrm;
@@ -111,11 +110,7 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionX
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            }, _ => { }, e =>
-            {
-                Debug.Log(e);
-                LoadOtherPlayerModel(userId, modelId);
-            });
+            }, _ => { }, e => { });
         }
     }
 }
