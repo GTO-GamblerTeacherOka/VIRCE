@@ -8,7 +8,6 @@ namespace Lobby
     /// </summary>
     public class AnimatorControl : MonoBehaviour
     {
-        private static Dictionary<string, GameObject> _userObjects;
         private static Vector3 _lastPos;
         private static readonly int Speed = Animator.StringToHash("speed");
         public Animator animator;
@@ -16,28 +15,25 @@ namespace Lobby
 
         private void Update()
         {
-            foreach (var (key, obj) in _userObjects)
+            var currentPos = transform.position;
+            if (currentPos != _lastPos)
             {
-                var currentPos = obj.transform.position;
-                if (currentPos != _lastPos)
+                if (_isAnimating == false)
                 {
-                    if (_isAnimating == false)
-                    {
-                        animator.SetFloat(Speed, 1.0f);
-                        _isAnimating = true;
-                    }
+                    animator.SetFloat(Speed, 1.0f);
+                    _isAnimating = true;
                 }
-                else
-                {
-                    if (_isAnimating)
-                    {
-                        animator.SetFloat(Speed, 0);
-                        _isAnimating = false;
-                    }
-                }
-
-                _lastPos = currentPos;
             }
+            else
+            {
+                if (_isAnimating)
+                {
+                    animator.SetFloat(Speed, 0);
+                    _isAnimating = false;
+                }
+            }
+
+            _lastPos = currentPos;
         }
     }
 }
