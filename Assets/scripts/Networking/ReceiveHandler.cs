@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Lobby.Chat;
 using Protocol;
 using Settings;
+using UnityEngine;
 using VRoid;
 
 namespace Networking
@@ -31,6 +32,7 @@ namespace Networking
                         }
                         else
                         {
+                            Debug.Log($"recv model ID: {Encoding.UTF8.GetString(body)}");
                             ModelManager.ModelIds[userId] = Encoding.UTF8.GetString(body);
                             ModelManager.WaitingLoadUserIds.Add(userId);
                         }
