@@ -12,7 +12,7 @@ namespace Lobby
     /// </summary>
     public class LobbyManager : MonoBehaviour
     {
-        private const float TimeSpan = 0.1f;
+        private const float TimeSpan = 0.05f;
         private static float _lastSendTime;
         private static Dictionary<byte, Vector3[]> _userPositions = new();
         private static Dictionary<byte, GameObject> UserObjects => ModelManager.Models;
