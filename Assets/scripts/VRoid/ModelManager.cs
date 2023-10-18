@@ -94,6 +94,9 @@ namespace VRoid
                 var animator = vrm.GetComponent<Animator>();
                 animator.runtimeAnimatorController = _animatorController;
 
+                var animatorControl = vrm.AddComponent<AnimatorControl>();
+                animatorControl.animator = animator;
+
                 var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                 var height = animator.GetBoneTransform(HumanBodyBones.Head).position.y -
                              animator.GetBoneTransform(HumanBodyBones.Hips).position.y;
