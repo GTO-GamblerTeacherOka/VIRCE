@@ -80,7 +80,6 @@ namespace VRoid
 
         public void LoadOtherPlayerModel(byte userId, string modelId)
         {
-            Debug.Log("Load model");
             MultiplayModelLoader.LoadVrm(modelId, vrm =>
             {
                 Models[userId] = vrm;
@@ -93,6 +92,9 @@ namespace VRoid
 
                 var animator = vrm.GetComponent<Animator>();
                 animator.runtimeAnimatorController = _animatorController;
+
+                var animatorControl = vrm.AddComponent<AnimatorControl>();
+                animatorControl.animator = animator;
 
                 var colliderComponent = vrm.gameObject.AddComponent<CapsuleCollider>();
                 var height = animator.GetBoneTransform(HumanBodyBones.Head).position.y -
@@ -108,11 +110,7 @@ namespace VRoid
                                                  | RigidbodyConstraints.FreezePositionX
                                                  | RigidbodyConstraints.FreezePositionZ;
                 rigitBodyComponent.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            }, _ => { }, e =>
-            {
-                Debug.Log(e);
-                LoadOtherPlayerModel(userId, modelId);
-            });
+            }, _ => { }, e => { });
         }
     }
 }
