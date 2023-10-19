@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using Lobby.Chat.DataBase;
 using UnityEngine;
 using Zenject;
@@ -27,6 +26,9 @@ namespace Lobby.Chat
         [Inject] private GUISkin _skin;
 
         private Rect _windowRect = new(0, 0, 400, 400);
+        
+        // Use for Debug
+        private string _errorMessage = string.Empty;
 
         private void Start()
         {
@@ -48,6 +50,9 @@ namespace Lobby.Chat
                 if (GUI.Button(new Rect(0, _screenSize.y - 60, 60, 60), chatButtonTexture, GUIStyle.none))
                     _showWindow = true;
             }
+            // debug
+            GUI.Label(new Rect(0, 0, 400, 20), _errorMessage);
+            // end debug
         }
 
         private void DrawWindow(int windowID)
@@ -58,9 +63,16 @@ namespace Lobby.Chat
             // ReSharper disable once InvertIf
             if (GUI.Button(new Rect(360, 340, 40, 40), sendButtonTexture, GUIStyle.none))
             {
-                if (_chatMessage.Length > 0)
-                    chatManager.SendChatMessage(new Message("Demo", "DemoUser", _chatMessage, DateTime.Now));
-                _chatMessage = string.Empty;
+                try
+                {
+                    if (_chatMessage.Length > 0)
+                        chatManager.SendChatMessage(new Message("Demo", "DemoUser", _chatMessage, DateTime.Now));
+                    _chatMessage = string.Empty;
+                }
+                catch (Exception e)
+                {
+                    _errorMessage = e.Message;
+                }
             }
 
             var messages = chatManager.GetChatMessages();
@@ -81,12 +93,9 @@ namespace Lobby.Chat
                 {
                     var wordWidth = GetWordWidth(word);
 
-                    if (lineLength + wordWidth + (displayStr.Length  > 0 ? 1 : 0) <= lineWidth)
+                    if (lineLength + wordWidth + (displayStr.Length > 0 ? 1 : 0) <= lineWidth)
                     {
-                        if (!string.IsNullOrEmpty(displayStr))
-                        {
-                            displayStr += " ";
-                        }
+                        if (!string.IsNullOrEmpty(displayStr)) displayStr += " ";
                         displayStr += word;
                         lineLength += wordWidth + (displayStr.Length > 0 ? 1 : 0);
                     }
@@ -110,32 +119,22 @@ namespace Lobby.Chat
                 count++; // 改行時の行数増加に加えて、1行分の行数を追加
             }
 
+            GUI.EndScrollView();
+
             int GetWordWidth(string word)
             {
-                int width = 0;
+                var width = 0;
 
-                foreach (var c in word)
-                {
-                    width += GetCharWidth(c);
-                }
+                foreach (var c in word) width += GetCharWidth(c);
                 return width;
             }
 
             int GetCharWidth(char c)
             {
                 if (c >= 32 && c <= 126) // 印刷可能な ASCII 文字の範囲
-                {
                     return 1;
-                }
-                else
-                {
-                    return 2;
-                }
+                return 2;
             }
         }
     }
 }
-
-
-        
-    
