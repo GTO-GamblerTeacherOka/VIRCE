@@ -1,18 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Networking;
+using Pixiv.VroidSdk;
+using Protocol;
 using UnityEngine;
+using VRoid;
 
+/// <summary>
+///     Class for managing game
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static GameManager _instance;
+
+    public static readonly string[] DisplayNames = new string[32];
+
+    private void Awake()
     {
-        
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            Auth.Init();
+            ModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
+            MultiplayModelLoader.Initialize(Auth.SDKConfig, Auth.Api, "virce");
+            Application.targetFrameRate = 60;
+            Socket.Instance.StartRecv().Forget();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnApplicationQuit()
     {
-        
+        Api.SendExit();
     }
 }

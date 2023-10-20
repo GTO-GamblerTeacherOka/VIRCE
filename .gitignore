@@ -72,3 +72,29 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 .idea/
+
+Assets/VRoidSDK/Android
+Assets/VRoidSDK/Android.meta
+Assets/VRoidSDK/Editor
+Assets/VRoidSDK/Editor.meta
+Assets/VRoidSDK/Bin
+Assets/VRoidSDK/Bin.meta
+Assets/VRoidSDK/Extensions
+Assets/VRoidSDK/Extensions.meta
+Assets/VRoidSDK/Plugins
+Assets/VRoidSDK/Plugins.meta
+Assets/VRoidSDK/Examples/ArtworkExample
+Assets/VRoidSDK/Examples/ArtworkExample.meta
+
+Assets/Sci-Fi UI
+Assets/Sci-Fi UI.meta
+Assets/Resources/credential.json.bytes
+Assets/Resources/credential.json.bytes.meta
+Assets/Plugins/Zenject
+Assets/Plugins/Zenject.meta
+Assets/Plugins/UniTask
+Assets/Plugins/UniTask.meta
+Assets/_DLNK
+Assets/_DLNK.meta
+Assets/VRoidSDK-v0.2.2
+Assets/VRoidSDK-v0.2.2.meta
