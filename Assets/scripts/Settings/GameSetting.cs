@@ -6,7 +6,7 @@ namespace Settings
     {
         static GameSetting()
         {
-            var ip = IPAddress.Parse("35.194.133.152");
+            var ip = IPAddress.Parse("104.198.112.170");
             RemoteEndPoint = new IPEndPoint(ip, 5000);
         }
 
