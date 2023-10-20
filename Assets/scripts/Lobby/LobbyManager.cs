@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Networking;
 using Protocol;
 using Settings;
 using UnityEngine;
 using VRoid;
+using Buffer = Networking.Buffer;
 
 namespace Lobby
 {
@@ -55,13 +57,33 @@ namespace Lobby
                 {
                     obj.transform.position =
                         Vector3.Lerp(obj.transform.position, _userPositions[key][0], _lastSendTime / TimeSpan);
-                    obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, _userPositions[key][1],
-                        _lastSendTime / TimeSpan);
+
+                    if (Math.Abs(obj.transform.eulerAngles.y - _userPositions[key][1].y) > 180)
+                    {
+                        //(obj.transform.eulerAngles.y > _userPositions[key][1].y ? obj.transform.eulerAngles.y : _userPositions[key][1].y) += 360;
+                        if(obj.transform.eulerAngles.y > _userPositions[key][1].y)
+                        {
+                            _userPositions[key][1] += new Vector3(0, 360, 0);
+                        }
+                        else
+                        {
+                            obj.transform.eulerAngles += new Vector3(0, 360, 0);
+                        }
+                        float avg = (obj.transform.eulerAngles.y + _userPositions[key][1].y) / 2 + 400 * (float)Math.PI;
+                        obj.transform.eulerAngles = new Vector3(0, avg + avg % 360, 0);
+
+                    }
+                    else
+                    {
+                        obj.transform.eulerAngles =
+                            Vector3.Lerp(obj.transform.eulerAngles, _userPositions[key][1], _lastSendTime / TimeSpan);
+                    }
                 }
                 catch
                 {
                     // ignored
                 }
+                Debug.Log(obj.transform.eulerAngles.y);
             }
         }
 
