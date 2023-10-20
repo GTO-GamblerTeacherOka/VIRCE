@@ -60,7 +60,6 @@ namespace Lobby
 
                     if (Math.Abs(obj.transform.eulerAngles.y - _userPositions[key][1].y) > 180)
                     {
-                        //(obj.transform.eulerAngles.y > _userPositions[key][1].y ? obj.transform.eulerAngles.y : _userPositions[key][1].y) += 360;
                         if(obj.transform.eulerAngles.y > _userPositions[key][1].y)
                         {
                             _userPositions[key][1] += new Vector3(0, 360, 0);
@@ -83,7 +82,6 @@ namespace Lobby
                 {
                     // ignored
                 }
-                Debug.Log(obj.transform.eulerAngles.y);
             }
         }
 
